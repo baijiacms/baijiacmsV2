@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta property="qc:admins" content="2145337462112113536375" />
+<meta content="telephone=no, address=no" name="format-detection">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" /> 
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title><!--@php echo $cfg['shop_title'] @--></title>
+<link rel="stylesheet"  href="__RESOURCE__/login/css/bootstrap.min.css">
+<link rel="stylesheet" href="__RESOURCE__/login/css/font-awesome.min.css">
+<style>
+body{background:#efefef ;}
+.head{height:40px; line-height:40px;  padding:5px; 5px; color:#fff;border-bottom: 1px solid #a5d7de;  background: #5babe6 !important;}
+.head .bn{display:inline-block; height:30px; line-height:30px; padding:0 10px; margin-top:0px; font-size:20px; color:#FFF; text-decoration:none;}
+.head .bn.pull-right{position:absolute; right:5px; top:0;}
+.head .title{font-size:14pt;display:block;padding-left:10px;font-weight:bolder;margin-right:49px;text-align:center;height:40px;line-height:30px;text-overflow:ellipsis;white-space:nowrap;overflow: hidden;}
+.head .order{background:#F9F9F9; position:absolute; z-index:9999; right:0;}
+.head .order li > a{display:block; padding:0 10px; min-width:100px; height:35px; line-height:35px; font-size:16px; color:#666; text-decoration:none; border-top:1px #EEE solid;}
+.head .order li > a i{display:inline-block; width:20px;}
+.head .order li.icon-caret-up{font-size:20px;color:#F9F9F9;position:absolute;top:-11px;right:16px;}
+.form-horizontal{margin:5px; background:#fafafa; padding:20px 10px 10px 10px; overflow:hidden;}
+.form-horizontal label{color:#555;}
+.form-horizontal .sendverify{margin-right:15px; width:100%;}
+.form-horizontal .resolve{background:#FFF; border-top:2px #769cdc solid; padding:10px;}
+.form-horizontal .resolve .resolver, .resolve .date{text-align:right; color:#888;}
+.form-horizontal .resolve .resolver{color:#779cdc;}
+.width-auto {width:auto;}
+.pull-right {float:right;}
+.pull-left {float:left;}
+</style>
+</head>
+
+<body style="min-width: 320px;max-width: 640px;margin:0 auto;">
+
+<style>
+.form-horizontal .control-label{margin-bottom:5px; font-size:14px;}
+.form-group{margin-bottom:10px;}
+</style>
+<form class="form-horizontal img-rounded" role="form" method="post" onsubmit="return checkInfo(this);">
+
+
+
+<div class="form-group">
+	<label for="mobile" class="col-sm-3 control-label">用户名</label>
+	<div class="col-sm-6">
+		<input type="text" id="realname" name="realname" value="<!--@php echo $memberinfo['realname'];@-->" class="form-control span2" placeholder="输入您的用户名" />
+	</div>
+</div>
+<div class="form-group">
+	<label for="mobile" class="col-sm-3 control-label">邮箱</label>
+	<div class="col-sm-6">
+		<input type="text" id="email" name="email" value="<!--@php echo $memberinfo['email'];@-->" class="form-control span2" placeholder="输入您的邮箱" />
+	</div>
+</div>
+<hr/>
+<!--@php if(!empty($memberinfo['outgoldinfo'])){$outgoldinfo=unserialize($memberinfo['outgoldinfo']); }@-->
+<div class="form-group">
+
+	<label for="mobile" class="col-sm-3 control-label">取款方式</label>
+
+	<div class="col-sm-6">
+
+		<select name="outgold_paytype" id="outgold_paytype" style="width: 150px; height:40px; line-height:28px; padding:2px 0" onchange="changeoutgold(this)">
+     				<option value="1" <!--@php if(empty($outgoldinfo['outgold_paytype'])||$outgoldinfo['outgold_paytype']==1){ @-->selected<!--@php  } @-->>银行卡</option>   
+     				     				  				<option value="2" <!--@php  if($outgoldinfo['outgold_paytype']==2){ @-->selected<!--@php  } @-->>支付宝</option>
+     				     				  					<option value="3" <!--@php if($outgoldinfo['outgold_paytype']==3){ @-->selected<!--@php  } @-->>微信号</option>
+     							     				</select>
+
+	</div>
+
+</div>
+<span id="outgold_bank">
+
+<div class="form-group">
+
+	<label for="mobile" class="col-sm-3 control-label">收款银行</label>
+
+	<div class="col-sm-6">
+
+		<select name="outgold_bankname" style="width: 150px; height:40px; line-height:28px; padding:2px 0">
+     				<option value="中国工商银行" <!--@php if(empty($outgoldinfo['outgold_bankname'])||$outgoldinfo['outgold_bankname']=='中国工商银行'){ @-->selected<!--@php  } @-->>中国工商银行</option>   
+     				     				  				<option value="中国农业银行" <!--@php if($outgoldinfo['outgold_bankname']=='中国农业银行'){ @-->selected<!--@php  } @-->>中国农业银行</option> 
+     				     				  					<option value="中国银行" <!--@php if($outgoldinfo['outgold_bankname']=='中国银行'){ @-->selected<!--@php  } @-->>中国银行</option> 
+     				     				  						<option value="中国建设银行" <!--@php if($outgoldinfo['outgold_bankname']=='中国建设银行'){ @-->selected<!--@php  } @-->>中国建设银行</option> 
+     							     				</select>
+
+	</div>
+
+</div>
+
+<div class="form-group">
+
+	<label for="mobile" class="col-sm-3 control-label">收款人姓名</label>
+
+	<div class="col-sm-6">
+
+<input type="text" name="outgold_bankcardname" value="<!--@php echo $outgoldinfo['outgold_bankcardname'];@-->" class="form-control span2" placeholder="收款人姓名" />
+
+
+	</div>
+
+</div>
+
+<div class="form-group">
+
+	<label for="mobile" class="col-sm-3 control-label">收款人账号</label>
+
+	<div class="col-sm-6">
+
+<input type="text" id="email" name="outgold_bankcardcode" value="<!--@php echo $outgoldinfo['outgold_bankcardcode'];@-->" class="form-control span2" placeholder="收款人账号" />
+
+
+	</div>
+
+</div>
+</span>
+
+
+<div class="form-group" id="outgold_alipay">
+
+	<label for="mobile" class="col-sm-3 control-label">支付宝账户</label>
+
+	<div class="col-sm-6">
+
+<input type="text"  name="outgold_alipay" value="<!--@php echo $outgoldinfo['outgold_alipay'];@-->" class="form-control span2" placeholder="输入您的支付宝账户" />
+
+
+	</div>
+
+</div>
+
+
+<div class="form-group" id="outgold_weixin">
+
+	<label for="mobile" class="col-sm-3 control-label">微信账户</label>
+
+	<div class="col-sm-6">
+
+<input type="text"   id="t_outgold_weixin" name="outgold_weixin" value="<!--@php echo $outgoldinfo['outgold_weixin'];@-->" class="form-control span2" placeholder="微信账户openid" />
+<!--@php if(!empty($weixin_openid)){ @-->
+<a href="javascript:;" style="color:red" onclick="document.getElementById('t_outgold_weixin').value='<!--@php echo $weixin_openid;@-->';">获取当前微信号openid</a>
+<!--@php }@-->
+	</div>
+
+</div>
+
+
+<div class="form-group">
+	<div class="col-xs-12">
+		<button type="submit" name="submit" value="submit" class="btn btn-primary btn-lg" style="width:100%;">提交</button>
+	</div>
+</div>
+
+
+</form>
+
+<script type="text/javascript">
+<!--@
+	function checkInfo(form) {
+				var mobile = form['mobile'].value;
+		if (!mobile) {
+			alert('请输入您的手机号码！');
+			return false;
+		}
+		if (mobile.search(/^([0-9]{11})?$/) == -1) {
+			alert('请输入正确的手机号码！');
+			return false;
+		}
+				if (!form['pwd'].value) {
+			alert('请输入登录密码。');
+			return false;
+		}
+			if (form['pwd'].value!=form['repwd'].value) {
+			alert('两次登录密码不一致。');
+			return false;
+		}
+
+	}
+	
+		function changeoutgold(outgold)
+	{
+		if(outgold.value==1)
+		{
+			document.getElementById('outgold_bank').style.display="block";
+			document.getElementById('outgold_alipay').style.display="none";
+			document.getElementById('outgold_weixin').style.display="none";
+		}
+				if(outgold.value==2)
+		{
+				document.getElementById('outgold_bank').style.display="none";
+			document.getElementById('outgold_alipay').style.display="block";
+			document.getElementById('outgold_weixin').style.display="none";
+		}
+				if(outgold.value==3)
+		{
+				document.getElementById('outgold_bank').style.display="none";
+			document.getElementById('outgold_alipay').style.display="none";
+			document.getElementById('outgold_weixin').style.display="block";
+		}
+	}
+	
+	changeoutgold(document.getElementById('outgold_paytype'));
+//@-->
+</script>
+<!--@php  include page('footer');@-->	
+<!--@php include themePage('footer');@-->
+</body></html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title><!--@php echo $cfg['shop_title'] @--></title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link href="__RESOURCE__/css/bjcommon.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__RESOURCE__/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("#submit").click(function() {
+		if($("#search_word").val()){
+			$("#searchForm").submit();
+		} else {
+			alert("请输入关键词！");
+			return false;
+		}
+	});
+});
+</script>
+
+</head>
+<body style="margin:0 auto; padding:0 auto">
+
+   
+  
+ 
+<div id="viewport" class="viewport">
+  <div class="slider card card-nomb" style="visibility: visible;">
+    <!-- banner轮播Start -->
+    <script type="text/javascript" src="__RESOURCE__/js/TouchSlide.1.1.js"></script>
+    <div id="focus" class="focus">
+      <div class="hd">
+        <ul>
+        </ul>
+      </div>
+      <div class="bd">
+        <ul>
+        <!--@php  if(is_array($advs)) { foreach($advs as $adv) { @-->
+              <li><a href="<!--@php  if(empty($adv['link'])) { @--><!--@php  } else { @--><!--@php  echo $adv['link'];@--><!--@php  } @-->"> <img src="<!--@php echo WEBSITE_ROOT;@-->/attachment/<!--@php  echo $adv['thumb'];@-->" /></a></li>
+              <!--@php  } } @-->
+        </ul>
+      </div>
+    </div>
+    <script type="text/javascript">
+	TouchSlide({ 
+		slideCell:"#focus",
+		titCell:".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+		mainCell:".bd ul",
+		delayTime:600,
+		interTime:4000,
+		effect:"leftLoop", 
+		autoPlay:true,//自动播放
+		autoPage:true, //自动分页
+		switchLoad:"_src" //切换加载，真实图片路径为"_src" 
+	});
+	</script>
+    <!-- banner轮播End -->
+  </div>
+
+ 
+
+<div id="home-page" data-role="page" data-member-sn="ejWCX" data-member-subscribe="true">
+	<div role="main" class="ui-content ">
+	<div class="WX_search1" style="float:left; width:100%" id="mallHead">
+	<form class="WX_search_frm1" action="index.php" id="searchForm" name="searchForm">
+		<input type="hidden" name="mod" value="mobile" />
+          <input type="hidden" name="do" value="goodlist" />
+          <input type="hidden" name="name" value="shopwap" />
+        <input name="keyword" id="search_word" class="WX_search_txt hd_search_txt_null" placeholder="请输入商品名进行搜索！" ptag="37080.5.2" type="search" value=""  AUTOCOMPLETE="off"/> 
+    <div class="WX_me">
+        <a href="javascript:;" id="submit" class="WX_search_btn_blue" >搜索</a>      
+    </div>
+	 </form>
+</div>
+
+  <!-- 4列广告 -->
+      <ul class="custom-nav-4 clearfix" style="background-color:#ffffff;">
+        <li> <a href="<!--@php  echo mobile_url('listCategory')@-->"> <span class="nav-img-wap"> <img class="js-lazy" src="__RESOURCE__/images/t1.jpg" style="display: inline;"> </span> <span class="title">全部商品</span> </a> </li>
+        <li> <a href="<!--@php  echo mobile_url('help')@-->"> <span class="nav-img-wap"> <img class="js-lazy" src="__RESOURCE__/images/t2.png" style="display: inline;"> </span> <span class="title">购物须知</span> </a> </li>
+        <li> <a href="<!--@php  echo mobile_url('mycart')@-->"> <span class="nav-img-wap"> <img class="js-lazy" src="__RESOURCE__/images/t3.png" style="display: inline;"> </span> <span class="title">购物车</span> </a> </li>
+        <li> <a href="<!--@php  echo mobile_url('fansindex')@-->"> <span class="nav-img-wap"> <img class="js-lazy" src="__RESOURCE__/images/t4.png" style="display: inline;"> </span> <span class="title">个人中心</span> </a> </li>
+      </ul>
+	
+
+ 
+
+
+    <div class="home-categories"  >
+	
+	
+	
+	
+	
+        <!--@php foreach($category as $row){ @-->
+        <div class="category-container" style="background-color:#ffffff;">
+		  <div class="category-name">
+	          <a class="category-url" href="<!--@php  echo mobile_url('goodlist', array('pcate' => $row['id']));@-->">
+	              <div class="name-border"></div>
+	              <div class="name"><!--@php echo $row['name'];@--></div>
+					     <div class="name-more">
+                  <i class="icons-arrow-right2"></i>
+                </div>
+                  <div class="text-more"> <a href="<!--@php  echo mobile_url('goodlist', array('pcate' => $row['id']));@-->" style="color:#000000" >更多</a></div>
+				
+	            </div>
+
+	          	</a>
+			  </div>
+			
+	
+          <ul class="os_box_list" >
+		  
+         
+
+	
+		 <!--@php foreach($row['list'] as $item){ @-->
+			 	
+                          <li>
+                              <a href="<!--@php echo mobile_url('detail', array('id' => $item['id']))@-->" class="item">
+                                 
+                                  <div class="img"><img src="<!--@php echo WEBSITE_ROOT;@-->/attachment/<!--@php echo $item['thumb']@-->"  usesrc="1" alt=""></div>
+                                  <div class="txt"><!--@php echo $item['title'];@--></div>
+                                  
+                                  <div class="buy">
+                                      <span class="price"><strong><em>¥<!--@php echo $item['marketprice'];@--></em></strong><del>¥<!--@php echo $item['productprice'];@--></del></span>
+                                   
+                                  </div>
+                              </a>
+                          </li>
+						  
+						  <!--@php } @-->
+	
+
+       
+		
+          </ul>
+   				  <!--@php } @-->
+    </div>
+
+ </div>
+</div>         
+ </div>
+	<div class="viewport">
+	<footer style="width:100%;min-width:300px;margin-bottom:50px;padding:10px 0;color:#555;text-align:center;"><a style="color:#555;margin:0 3px;" href="#">&copy; <!--@php echo $cfg['shop_title'] @--></a></footer>
+		</div>
+
+<!--@php include themePage('footer');@-->
+
+
+
+
+
+</body>
+</html>

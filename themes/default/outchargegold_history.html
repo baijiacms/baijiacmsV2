@@ -1,0 +1,109 @@
+
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>提现记录</title>
+	<link type="text/css" rel="stylesheet" href="__RESOURCE__/mobile/style/bootstrap.css">
+     <link rel="stylesheet" type="text/css" href="__RESOURCE__/recouse/css/fd.css">
+    <link rel="stylesheet" type="text/css" href="__RESOURCE__/recouse/css/normalize.css">
+     <link rel="stylesheet" type="text/css" href="__RESOURCE__/recouse/css/fcommom.css">
+	 <link href="__RESOURCE__/recouse/css/bottom.css" rel="stylesheet" type="text/css" />
+    <script src="__RESOURCE__/recouse/js/jquery.js"></script>
+    
+</head>
+
+<body>
+ 
+     <nav class="tab-bar">
+            <section class="left-small">
+                <a href="<!--@php  echo mobile_url('outchargegold')@-->" class="menu-icon"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">余额提现</h1>
+            </section>
+        </nav>
+    <!--content begin-->
+    <div class="tabs-content">
+          <!--content begin-->
+    <div class="tabs-content">
+      
+        
+        <!--wait recevie begin-->
+        <div class="content active" id="extractlist">
+       
+    
+
+        	
+      	<!--@php  if(!empty($list)){ @-->			
+              <ul class="list-disorder">
+              	  	<table class="table table-hover" style="width:100%">
+			<thead class="navbar-inner" >
+								<tr>
+									<th style="text-align: center;">日期</th>
+									<th style="text-align: center;">类型</th>
+									<th style="text-align: center;">金额</th>
+								
+									<th style="text-align: center;">状态</th>
+								</tr>
+									</thead>
+										<tbody>
+					
+      	<!--@php foreach($list as $v){ @-->	
+									
+								<tr>
+									<td style="text-align: center;">
+									<!--@php echo $v['createtime'] @-->	
+									</td>
+									<td style="text-align: center;">
+										打款
+										
+									</td>
+									<td style="text-align: center;">
+											<!--@php echo $v['fee'] @-->
+									</td>
+							
+									<td style="text-align: center;">
+										<!--@php if($v['status']==0){ @-->	
+										待审核
+										    <!--@php }  @-->			
+										    		<!--@php if($v['status']==1){ @-->	
+										已打款
+										    <!--@php }  @-->	
+										    		<!--@php if($v['status']==-1){ @-->	
+										审核失败
+										    <!--@php }  @-->						
+									</td>
+								</tr>
+									
+					         <!--@php }  @-->		
+											</tbody>
+	
+		
+		</table>
+        <!--@php  echo  $pager; @-->
+              </ul>
+      <!--@php }  @-->		
+        	
+              	<!--@php  if(empty($list)){ @-->	
+            <div class="disorder-none"><i class="icon-none"></i><span class="nonetext">您还没有提现记录！</span></div>
+              <!--@php }  @-->		
+        </div>
+      
+    </div>
+	
+
+	<!--@php  include page('footer');@-->			
+
+	
+
+	<!--@php include themePage('footer');@-->
+
+</body>
+
+</html>

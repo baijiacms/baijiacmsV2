@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>我要充值</title>
+    <link rel="stylesheet" type="text/css" href="__RESOURCE__/recouse/css/fd.css?v={BJ_QMXK_VERSION}">
+    <link rel="stylesheet" type="text/css" href="__RESOURCE__/recouse/css/fcommom.css?v={BJ_QMXK_VERSION}">
+	    <link rel="stylesheet" type="text/css" href="__RESOURCE__/recouse/css/ds4.css?v={BJ_QMXK_VERSION}">
+    <script src="__RESOURCE__/recouse/js/jquery.js"></script>
+    <script src="__RESOURCE__/recouse/js/foundation.js"></script>
+    <script src="__RESOURCE__/recouse/js/foundation.tab.js"></script>
+    <script src="__RESOURCE__/recouse/js/foundation.accordion.js"></script>
+    <script src="__RESOURCE__/recouse/js/func.js"></script>		<style>.head{height:40px; line-height:40px;  padding:5px; 5px; color:#fff;border-bottom: 1px solid #a5d7de;  background: #5babe6 !important;}.head .bn{display:inline-block; height:30px; line-height:30px; padding:0 10px; margin-top:0px; font-size:20px; color:#FFF; text-decoration:none;}.head .bn.pull-right{position:absolute; right:5px; top:0;}.head .title{font-size:14pt;display:block;padding-left:10px;font-weight:bolder;margin-right:49px;text-align:center;height:40px;line-height:30px;text-overflow:ellipsis;white-space:nowrap;overflow: hidden;}.pull-right {float:right;}.pull-left {float:left;}</style>	
+</head>
+<body style="min-width: 320px;max-width: 640px;margin:0 auto;">
+    <div class="mask"></div>
+    <form class="form-horizontal img-rounded" role="form" method="post" >
+    <!--topbar end-->
+    <!--amount begin-->
+    <div class="bro-spare">
+        <p class="tip-txt"><i class="icon-money"></i>账户可用余额</p>
+        <span class="number-big">¥<!--@php echo $member['gold']@--></span>
+    </div>
+    <!--amount end-->
+    <!--list begin-->
+    <ul class="maneylist" style="display: ;">
+      <li class="maneylist-li">
+                <i class="icon-money-circle"></i>
+                <span class="text">付款方式</span>
+                 <span class="text">	<select style="margin-right:15px;" id="paymentcode" name="paymentcode"> 
+                 		 <option value="" selected="">---请选择---</option>
+              <!--@php  if(is_array($paymentlist)) { foreach($paymentlist as $item) { @-->	
+					 <option value="<!--@php echo $item['code']@-->" ><!--@php echo $item['name']@--></option>
+					        <!--@php  } } @-->
+                  	                   </select></span>
+      
+        </li>
+       
+          <li class="maneylist-li">
+                <i class="icon-money-circle"></i>
+                <span class="text">充值余额</span>
+                 <span class="text">	<input type="text" name="charge" value="" /></span>
+      
+        </li>
+           
+    </ul>
+    <!--list end-->
+
+    <div class="bro-extract-btn">
+		<button type="submit" name="submit" value="submit" class="button [radius round] red" style="width:100%;">充值</button>
+		
+    </div>
+</form>
+ 
+    <!--help end-->
+
+
+	<!--@php  include page('footer');@-->			
+	
+	<!--@php include themePage('footer');@-->
+</body>
+</html>

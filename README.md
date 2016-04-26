@@ -1,3 +1,5 @@
+
+![](https://github.com/baijiacms/baijiacms.github.com/raw/master/image/logo/1.png)
 百家cms微商城遵循Apache2开源协议发布，并提供免费使用。
 百家CMS（微商城） 商标和著作权所有者为福州百家威信信息技术有限责任公司
 

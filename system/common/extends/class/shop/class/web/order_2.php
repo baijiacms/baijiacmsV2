@@ -6,7 +6,6 @@
 	 	
               bj_message_sendtkcgtz( $order['ordersn'],$order['price'],$order['openid'],$orderid);
   }
-  
   if(CUSTOM_VERSION==true&&is_file(CUSTOM_ROOT.'/common/extends/class/shop/class/web/order_2.php'))
 			{
   			require(CUSTOM_ROOT.'/common/extends/class/shop/class/web/order_2.php');

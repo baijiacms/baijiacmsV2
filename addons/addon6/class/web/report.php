@@ -4,7 +4,7 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 2015 http://www.baijiacms.com All rights reserved.
 // +----------------------------------------------------------------------
-// | Author: 百家威信 <QQ:2752555327> <http://www.baijiacms.com>
+// | Author: 百家cms <QQ:1987884799> <http://www.baijiacms.com>
 // +----------------------------------------------------------------------
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
@@ -19,8 +19,8 @@ ini_set('memory_limit', '350M');
 $objPHPExcel = new PHPExcel();
 
 // Set document properties
-$objPHPExcel->getProperties()->setCreator("百家威信")
-							 ->setLastModifiedBy("百家威信")
+$objPHPExcel->getProperties()->setCreator("百家cms")
+							 ->setLastModifiedBy("百家cms")
 							 ->setTitle("Office 2007 XLSX Test Document")
 							 ->setSubject("Office 2007 XLSX Test Document")
 							 ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")

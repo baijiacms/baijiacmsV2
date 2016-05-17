@@ -5,4 +5,8 @@ class userAddons  extends BjSystemModule {
 	{
 		$this->__web(__FUNCTION__);
 	}
+		public function do_usergroup()
+	{
+		$this->__web(__FUNCTION__);
+	}
 }

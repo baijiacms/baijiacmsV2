@@ -1,6 +1,6 @@
 <?php
 defined('SYSTEM_IN') or exit('Access Denied');
-		hasrule('weixin','weixin');
+	
 		
 		$menus = $this->menuQuery();
 		

@@ -1,6 +1,6 @@
 <?php
 defined('SYSTEM_IN') or exit('Access Denied');
-			hasrule('weixin','weixin');
+	
         $operation = !empty($_GP['op']) ? $_GP['op'] : 'display';
            
         if($operation=='detail')

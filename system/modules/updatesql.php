@@ -48,6 +48,49 @@ update `baijiacms_shop_order` set paytype=3 where paytypecode='delivery';
 update `baijiacms_shop_order` set paytype=2 where paytypecode='weixin';
 update `baijiacms_shop_order` set paytype=2 where paytypecode='alipay';
 update `baijiacms_shop_order` set paytype=2 where paytypecode='bank';
+
+CREATE TABLE IF NOT EXISTS `baijiacms_system_rule` (
+  `modname` varchar(15) DEFAULT NULL,
+  `moddo` varchar(15) DEFAULT NULL,
+  `rule_name` varchar(100) DEFAULT NULL,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `baijiacms_user_group` (
+  `createtime` int(10) NOT NULL,
+  `groupName` varchar(100) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of baijiacms_user_group
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for baijiacms_user_group_rule
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `baijiacms_user_group_rule` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `gid` int(10) NOT NULL,
+  `modname` varchar(15) NOT NULL,
+  `rule_name` varchar(100) DEFAULT NULL,
+  `moddo` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS  `baijiacms_sms_cache` (
+  `createtime` int(10) NOT NULL,
+  `checkcount` int(3) NOT NULL,
+  `smstype` varchar(50) DEFAULT NULL,
+  `tell` varchar(50) DEFAULT NULL,
+  `vcode` varchar(50) DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 CREATE TABLE IF NOT EXISTS  `baijiacms_paylog_alipay` (
   `createtime` int(10) NOT NULL,
   `alipay_safepid` varchar(50) DEFAULT NULL,
@@ -259,7 +302,21 @@ CREATE TABLE IF NOT EXISTS `baijiacms_dispatch` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 ";
-
+if(!mysqld_fieldexists('user', 'is_admin')) {
+	$sql=$sql."delete from  ".table('user_rule')." ;";
+	$sql=$sql."ALTER TABLE ".table('user')." ADD COLUMN `is_admin` int(1) NOT NULL DEFAULT '0' COMMENT '1管理员0用户';";
+	$sql=$sql."update ".table('user')." set `is_admin`=1;";
+}
+if(!mysqld_fieldexists('user_rule', 'rule_name')) {
+	$sql=$sql."delete from  ".table('user_rule')." ;";
+	$sql=$sql."ALTER TABLE ".table('user_rule')." ADD COLUMN `rule_name` varchar(100) DEFAULT NULL COMMENT '1管理员0用户';";
+}
+if(!mysqld_fieldexists('user', 'groupName')) {
+	$sql=$sql."ALTER TABLE ".table('user')." ADD COLUMN  `groupName` varchar(100) NOT NULL DEFAULT '' COMMENT '用户组名称';";
+}
+if(!mysqld_fieldexists('user', 'groupid')) {
+	$sql=$sql."ALTER TABLE ".table('user')." ADD COLUMN `groupid` int(10) NOT NULL DEFAULT '0' COMMENT '用户组id';";
+}
 if(!mysqld_fieldexists('weixin_wxfans', 'longitude')) {
 	$sql=$sql."ALTER TABLE ".table('weixin_wxfans')." ADD COLUMN `longitude` decimal(10,2) DEFAULT '0' COMMENT '地理位置经度';";
 }
@@ -350,6 +407,44 @@ if(!mysqld_fieldexists('shop_order', 'verify_openid')) {
 if(!mysqld_fieldexists('shop_goods', 'isverify')) {
 	$sql=$sql."ALTER TABLE ".table('shop_goods')." ADD COLUMN `isverify` int(1) DEFAULT '0' COMMENT '是否是核销产品0否1是';";
 }
+
+if(true)
+{
+	$sql=$sql."delete from ".table('system_rule').";";
+	$sql=$sql."
+	
+	
+	 
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('member', 'list', '会员管理');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('member', 'rank', '会员等级');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('member', 'outchargegold', '余额提现审核');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('shop', 'goods', '商品管理');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('shop', 'category', '商品分类管理');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('shop', 'order', '订单管理');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('shop', 'orderbat', '批量发货');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('shop', 'goods_comment', '评论管理');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('bonus', 'bonus', '优惠券管理');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('promotion', 'promotion', '促销免运费');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('shopwap', 'ALL', '商城模板');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('shop', 'adv', '商城首页广告设置');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('bj_tbk', 'setting', '分销模块-基础设置');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('bj_tbk', 'agent', '分销模块-代理管理');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('bj_tbk', 'commission', '分销模块-佣金审核');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('bj_tbk', 'tmessage', '分销模块-消息处理');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('bj_tbk', 'spread', '分销模块-海报管理');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('bj_tbk', 'phbmedal', '分销模块-粉丝排行头衔管理');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('shop', 'config', '商城基础设置');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('shop', 'noticemail', '新订单邮件提现');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('sms', 'setting', '短信设置');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('modules', 'payment', '支付方式设置');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('modules', 'thirdlogin', '快捷登陆设置');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('modules', 'dispatch', '配送方式设置');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('weixin', 'ALL', '微信设置');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`) VALUES ('alipay', 'ALL', '支付宝服务窗');
+INSERT INTO `baijiacms_system_rule` (`modname`, `moddo`,`rule_name`)  VALUES ('user', 'ALL', '用户管理'); ";
+	
+}
+
 mysqld_batch($sql); 
 
 if(CUSTOM_VERSION==true&&is_file(CUSTOM_ROOT.'/modules/updatesql.php'))
@@ -358,42 +453,3 @@ if(CUSTOM_VERSION==true&&is_file(CUSTOM_ROOT.'/modules/updatesql.php'))
 }
 
 clear_theme_cache();
-
-if(intval(SYSTEM_VERSION)<=20150724)
-{
- 	mysqld_update('shop_dispatch', array('express'=>'cac'),array('sendtype'=>1,'express'=>''));
-	$shop_dispatchs = mysqld_selectall("select * from ".table('shop_dispatch')."  group by express");
-	foreach($shop_dispatchs as $shop_dispatch)
-	{
-		$express_code=$shop_dispatch['express'];
-			$shop_dispatch_area = mysqld_select("SELECT * FROM " . table('shop_dispatch_area') . " WHERE  dispatchid=:dispatchid and provance=:provance and city=:city and area=:area  limit 1", array('dispatchid'=>$shop_dispatch['id'],'country'=>'中国','provance'=>$shop_dispatch['provance'],'city'=>$shop_dispatch['city'],'area'=>$shop_dispatch['area']));
-	 	if(empty($shop_dispatch_area['id']))
-	 	{
-		  mysqld_insert("shop_dispatch_area", array('dispatchid'=>$shop_dispatch['id'],'country'=>'中国','provance'=>$shop_dispatch['provance'],'city'=>$shop_dispatch['city'],'area'=>$shop_dispatch['area']));
-		}						 	
-		
-		$dispatch = mysqld_select("SELECT * FROM " . table('dispatch') . " WHERE  code=:code limit 1", array(':code' =>$express_code));
-	         
-		if(empty($dispatch['id']))
-		{
-			if(is_file(WEB_ROOT.'/system/modules/plugin/dispatch/'.$express_code.'/lang.php'))
-			{
-				require WEB_ROOT.'/system/modules/plugin/dispatch/'.$express_code.'/lang.php';
-				      				 $data = array(
-	                    'code' => $express_code,
-	                    'name' => $_LANG['dispatch_'.$express_code.'_name'],
-	                    'desc' => $_LANG['dispatch_'.$express_code.'_desc'],
-	                    'enabled' => '1',
-	                   'sendtype' => $_LANG['dispatch_'.$express_code.'_sendtype']
-	                  );
-										 mysqld_insert('dispatch', $data);
-										 
-										 
-										 
-										 
-			}
-			
-		}
-	 	
-	}
-}

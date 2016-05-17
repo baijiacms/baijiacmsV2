@@ -137,6 +137,8 @@
                 </div>
             </div>
             <div class="col-xs-6 pb15">
+            	
+      
                 <a href="<!--@php  echo mobile_url('goodlist')@-->" role="button" class="btn btn-default btn-block"
                    style="width: 97%">
                     <i class="iconfont bjicon-shangpin1"></i>查看全部商品
@@ -154,7 +156,7 @@
         <!-- 商品详情和评价 Start  -->
         <div id="tabBox1" class="tabBox">
             <div class="hd">
-                <ul>
+                <ul  style="padding-bottom:100px;">
                     <li><a href="javascript:void(0)">商品详情</a></li>
                     <li><a href="javascript:void(0)">客户评价</a></li>
                     <li><a href="javascript:void(0)">同类推荐</a></li>
@@ -162,7 +164,7 @@
             </div>
             <div class="bd" id="tabBox1-bd"><!-- 添加id，js用到 -->
                 <div class="con"><!-- 高度自适应需添加外层 -->
-                    <ul>
+                    <ul  style="padding-bottom:100px;">
                         <li>
                             <!--@php  echo $goods['content'];@-->
 
@@ -210,10 +212,6 @@
         </div>
         <!--商品详情和评价 End  -->
     </div>
-    <div class="container">
-        <!--@php  include page('footer');@-->
-    </div>
-
 <div class="modal" id="xzmodal" tabindex="-1" aria-labelledby="myModalLabel" role="dialog" style="top:auto">
     <div class="modal-dialog">
         <div class="media" style="padding-left: 15px;position: relative;margin-bottom: -74px;z-index: 2000;">
@@ -628,5 +626,5 @@
     }
 </script>
 
-</body>
-</html>
+<!--@php include themePage('weixinshare');@-->
+<!--@php  include page('footer');@-->	

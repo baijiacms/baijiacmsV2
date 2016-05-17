@@ -1,5 +1,5 @@
 <?php
-
+define('LOCK_TO_ADDONS_INSTALL', true);
 					$addons = dir(ADDONS_ROOT); 
 					while($file = $addons->read())
 					{ 

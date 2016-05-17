@@ -1,4 +1,18 @@
 <?php    
+
+	 if($_CMS['addons_bj_tbk']&& is_use_weixin())
+        {
+        	
+        	if(is_login_account())
+        	{
+        	
+        	
+	        	if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
+					include WEB_ROOT.'/addons/bj_tbk/template/mobile/weixinshare.php';
+				}
+			}
+				}else{
+				
 if ( is_use_weixin() ) {
         		
         					$dzddes=	$goods['description'];
@@ -33,7 +47,9 @@ if ( is_use_weixin() ) {
 				}
 				
 				
-				  if(CUSTOM_VERSION==true&&is_file(CUSTOM_ROOT.'/common/extends/class/shopwap/class/mobile/detail_3.php'))
+		
+			}
+					  if(CUSTOM_VERSION==true&&is_file(CUSTOM_ROOT.'/common/extends/class/shopwap/class/mobile/detail_3.php'))
 			{
   			require(CUSTOM_ROOT.'/common/extends/class/shopwap/class/mobile/detail_3.php');
 				}

@@ -55,6 +55,33 @@
 										</div>
 									</div>-->
 									
+									
+											   <div class="form-group">
+										<label class="col-sm-2 control-label no-padding-left" > 分类图片<br/>(建议尺寸: 100*100或正方型图片)</label>
+
+										<div class="col-sm-9">
+												
+															 <div class="fileupload fileupload-new" data-provides="fileupload">
+			                        <div class="fileupload-preview thumbnail" style="width: 200px; height: 150px;">
+			                        	 <?php  if(!empty($settings['admin_logo'])) { ?>
+			                            <img style="width:100%" src="<?php echo WEBSITE_ROOT;?>/attachment/<?php  echo $settings['admin_logo'];?>" alt="" onerror="$(this).remove();">
+			                              <?php  } ?>
+			                            </div>
+			                        <div>
+			                         <input name="thumb" id="thumb" type="file"  />
+			                            <a href="#" class="fileupload-exists" data-dismiss="fileupload">移除图片</a>
+			                            	 <?php  if(!empty($settings['admin_logo'])) { ?>
+			                              <input name="admin_logo_del" id="admin_logo_del" type="checkbox" value="1" />删除已上传图片
+			                                 <?php  } ?>
+			                        </div>
+			                    </div>
+												
+											
+										</div>
+									</div>
+									
+									
+									
 										   <div class="form-group">
 										<label class="col-sm-2 control-label no-padding-left" > 商店 Logo：<br/>(建议160*30)</label>
 
@@ -112,16 +139,7 @@
 									</div>
 									
 									
-									 	   <div class="form-group">
-										<label class="col-sm-2 control-label no-padding-left" > 开发者调试模式：<br/>(关闭后提升性能)</label>
-
-										<div class="col-sm-9">
-												 		   <input type="radio" name="core_development" value="0" id="core_development" <?php  if($core_development== 0) { ?>checked="true"<?php  } ?> /> 关闭  &nbsp;&nbsp;
-             
-              		  <input type="radio" name="core_development" value="1" id="core_development"  <?php  if($core_development == 1) { ?>checked="true"<?php  } ?> /> 开启
-             
-										</div>
-									</div>
+									 
 													
 											  <div class="form-group">
 										<label class="col-sm-2 control-label no-padding-left" for="form-field-1"> </label>

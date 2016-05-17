@@ -126,34 +126,23 @@ EOF;
 				 
 					 	file_put_contents(WEB_ROOT.'/config/config.php',$config); 
 					 	
-					 	file_put_contents(WEB_ROOT.'/config/version.php',"<?php define('SYSTEM_VERSION', ".CORE_VERSION.");"); 
+					// 	file_put_contents(WEB_ROOT.'/config/version.php',"<?php define('SYSTEM_VERSION', ".CORE_VERSION.");"); 
 					header("Location:".web_url("install",array("name"=>"public","op"=>"setp3","doact"=>"installsql", "adminname"=>urlencode(base64_encode($_GP['adminname'])), "adminpwd"=>urlencode(base64_encode(md5($_GP['adminpwd']))))));
 	
 			}
 				if ($_GP['doact']=="installsql") {
 					define('SYSTEM_INSTALL_IN',true);
 					require "installsql.php";
-					$data= array('username'=> base64_decode(urldecode($_GP['adminname'])),'password'=> base64_decode(urldecode($_GP['adminpwd'])),'createtime'=>time());
+					$data= array('username'=> base64_decode(urldecode($_GP['adminname'])),'is_admin'=>1,'password'=> base64_decode(urldecode($_GP['adminpwd'])),'createtime'=>time());
 					mysqld_insert('user', $data);
 					
 					
 					$account = mysqld_select('SELECT * FROM '.table('user')." WHERE  username=:username" , array(':username'=> base64_decode(urldecode($_GP['adminname']))));
-						if(!empty($account['id']))
-						{
-								 mysqld_delete('user_rule', array('uid'=> $account['id']));
-							 $allrule = mysqld_selectall('SELECT * FROM '.table('rule'));
-							foreach($allrule as $item){
-								$data= array('uid'=> $account['id'],'modname'=> $item['modname'],'moddo'=>$item['moddo']);
-								 mysqld_insert('user_rule', $data);
-					
-							
-							}
-							
-							
-						}
+				
 					
 					 $cfg = array(
-                'shop_openreg' => 1
+                'shop_openreg' => 1,
+                 'system_version' => CORE_VERSION
             );
           refreshSetting($cfg);
 					

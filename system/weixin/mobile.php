@@ -113,25 +113,32 @@ public function verifyorder($openid,$ordersn)
             }
 				}
 					
-			if($_CMS['addons_bj_qrcode'])
+			if($_CMS['addons_bj_tbk'])
 							    {
 							    	 
-												if(!empty($reply['addonsrule'])&&!empty($key)&&$reply['addonsModule']=='bj_qrcode')
+												if(!empty($reply['addonsrule'])&&!empty($key)&&$reply['addonsModule']=='bj_tbk')
 												{
 															
 														$from_user=$message['from'];
 															
-													 $spread = mysqld_select("SELECT * FROM " . table('bj_qrcode_qrcode')." where weixinkey=:weixinkey limit 1",array(':weixinkey'=>$key) );
+													 $spread = mysqld_select("SELECT * FROM " . table('bj_tbk_qrcode')." where weixinkey=:weixinkey limit 1",array(':weixinkey'=>$key) );
 													 
 													 if(!empty($spread['id']))
 													 {
 													 		$weixin_wxfans=mysqld_select('SELECT * FROM '.table('weixin_wxfans'). " WHERE weixin_openid = :weixin_openid", array(':weixin_openid' => $from_user));
 															 if(!empty($weixin_wxfans['openid']))
 																{
-																	
-																	
+					
+			if(!empty($spread['allowqrcode']))
+			{									
+	$bj_tbk_member_relect = mysqld_select("SELECT fmr.* FROM " .table('bj_tbk_member_relect')." as fmr where fmr.openid=:openid ",array(":openid"=>$weixin_wxfans['openid']  ));
+		if(empty($bj_tbk_member_relect['isagent']))
+		{
+ return $this->respText($spread['noallowmsg'],$message);		
+		}
+	}
 													
-																$media_id=bj_qrcode_qrcode($spread,$from_user,$weixin_wxfans['openid'],true,'media_id');
+																$media_id=bj_tbk_qrcode($spread,$from_user,$weixin_wxfans['openid'],true,'media_id');
 																
 														 return $this->respImage($media_id,$message);
 												
@@ -168,6 +175,7 @@ public function verifyorder($openid,$ordersn)
 					{
 							$eventkey=	$message['eventkey'];
 					}
+			
 					
 				$weixin_wxfans = mysqld_select('SELECT * FROM '.table('weixin_wxfans')."   WHERE  weixin_openid = :weixin_openid limit 1" , array(':weixin_openid' =>$message['from']));
 				if(empty($weixin_wxfans['weixin_openid'])&&!empty($message['from']))
@@ -184,7 +192,15 @@ public function verifyorder($openid,$ordersn)
 				{
 				mysqld_update('weixin_wxfans',array('follow'=>1),array('weixin_openid'=>$message['from']));	
 				}
-				if($_CMS['addons_bj_qrcode'])
+						if($_CMS['addons_bj_tbk'])
+					{
+						if(!empty($message['from'])&&!empty($eventkey))
+					{
+							$eventkey2=explode('-',$eventkey);
+						bj_tbk_base_shareinfo('',$eventkey2[0],$message['from'],'',1);
+					}
+				}
+				if($_CMS['addons_bj_tbk'])
 				{
 				if(!empty($message['from'])&&!empty($eventkey))
 					{
@@ -193,7 +209,7 @@ public function verifyorder($openid,$ordersn)
 						if(!empty($eventkey2[0])&&!empty($eventkey2[1]))
 						{
 							
-							bj_qrcode_qrcode_message($eventkey2,$message['from']);
+							bj_tbk_qrcode_message($eventkey2,$message['from']);
 						}
 						
 					
@@ -210,7 +226,7 @@ public function verifyorder($openid,$ordersn)
 				$latitude=$message['latitude'];
 				$precision=$message['precision'];
 					mysqld_update('weixin_wxfans',array('longitude'=>$longitude,'latitude'=>$latitude,'precision'=>$precision),array('weixin_openid'=>$message['from']));
-		//		weixin_send_custom_message($message['from'],"您所在的经度：".$longitude.",维度".$latitude);
+		  		weixin_send_custom_message($message['from'],"您所在的经度：".$longitude.",维度".$latitude);
 				exit('');
 			}
 				if($message['type']=='unsubscribe')
@@ -245,10 +261,17 @@ public function verifyorder($openid,$ordersn)
 				}
 
 				
-				exit('');
+			return $this->respService($message);
 		
 		}
 		
+	}
+			private function respService($message) {
+		$response = array();
+		$response['FromUserName'] = $message['to'];
+		$response['ToUserName'] = $message['from'];
+		$response['MsgType'] = 'transfer_customer_service';
+		return $this->response($response);
 	}
 	
 	

@@ -4,7 +4,7 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 2015 http://www.baijiacms.com All rights reserved.
 // +----------------------------------------------------------------------
-// | Author: 百家威信 <QQ:2752555327> <http://www.baijiacms.com>
+// | Author: baijiacms <QQ:1987884799> <http://www.baijiacms.com>
 // +----------------------------------------------------------------------
 defined('SYSTEM_IN') or exit('Access Denied');
 
@@ -76,7 +76,22 @@ function get_weixin_token($refresh=false) {
 		return $record['token'];
 	}
 }
+		//发送模板消息
+	function bj_message_sendtempmsg($from_user,$template_id, $tourl, $bj_message_data, $topcolor) {
+	
 
+   	if(empty($from_user))
+    {
+       return;
+    }
+
+		 
+    	$access_token=get_weixin_token();
+    	 $url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={$access_token}";
+ 	$postarr = '{"touser":"'.$from_user.'","template_id":"'.$template_id.'","url":"'.$tourl.'","topcolor":"'.$topcolor.'","data":'.$bj_message_data.'}';
+	
+   http_post($url,$postarr);
+	}
 function weixin_send_custom_message($from_user,$msg) {
 	  
     	$access_token=get_weixin_token();
@@ -97,11 +112,25 @@ function weixin_send_custom_msgnews($from_user,$title,$turl,$picurl,$description
     http_post($url,$post);
     	
 } 
+function weixin_share_2($mobilearray,$sharetitle,$shareimg,$sharedesc,$settings)
+	{
+			$shareimg=$shareimg;
+        $sharelink = WEBSITE_ROOT . create_url('mobile',$mobilearray);
 
+    
+			  $sharedata = array(
+      "title"       => $sharetitle,
+      "imgUrl"       => $shareimg,
+      "link"      => $sharelink,
+      "description" => $sharedesc
+    );
+    
+      $signPackage = weixin_js_signPackage($sharedata);
+		return $signPackage;
+	}
 function weixin_share($mobile_url,$mobilearray,$sharetitle,$shareimg,$sharedesc,$settings)
 	{
 			$shareimg=$shareimg;
-			 
         $sharelink = WEBSITE_ROOT . mobile_url($mobile_url, $mobilearray);
  
     
@@ -135,11 +164,12 @@ function is_use_weixin()
 	return false;
 }
 
-if ( is_use_weixin() ) {
 
 function weixin_code_access_token($state=0,$scope="snsapi_base",$refresh=false)
 	{
-
+	if ( is_use_weixin()==false ) {
+		return true;
+		}
 		global $_GP;
 		$tokenSession="weixin_token_".$state.$scope;
 		if($refresh)
@@ -166,6 +196,7 @@ function weixin_code_access_token($state=0,$scope="snsapi_base",$refresh=false)
 			$scope="snsapi_base";
 		}
 			$oauth2_code = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$appid."&redirect_uri=".urlencode($url)."&response_type=code&scope=".$scope."&state=".$state."#wechat_redirect";//$state 0 不拉取用户资料 1拉取用户资料
+			 $_SESSION[SESSION_PREFIX.'_Turl']=$url;
 			header("location:$oauth2_code");
 			exit;
 		}else
@@ -183,6 +214,8 @@ function weixin_code_access_token($state=0,$scope="snsapi_base",$refresh=false)
 		   $token['expires_in']=time()+$token['expires_in']-10;
 			  }
 		 	 $_SESSION[SESSION_PREFIX.$tokenSession]=serialize($token);
+			header("location:".$_SESSION[SESSION_PREFIX.'_Turl']);
+			exit;
 		    return $token;
 		}
 	}else
@@ -194,6 +227,9 @@ function weixin_code_access_token($state=0,$scope="snsapi_base",$refresh=false)
 	
 function xoauth() {
 //	message("维护中");
+	if ( is_use_weixin()==false ) {
+		return true;
+		}
 		global $_GP;
 		//用户不授权返回提示说明
 		if ($_GP['code']=="authdeny"){
@@ -312,6 +348,9 @@ function xoauth() {
 	}
 
 function get_weixin_openid($state=0) {
+	if ( is_use_weixin()==false ) {
+		return true;
+		}
 		global $_GP;
 			$settings=globaSetting(array("weixin_appId","weixin_appSecret"));
 				$appid = $settings['weixin_appId'];
@@ -357,6 +396,9 @@ $weixin_openid=get_weixin_openid();
 
 function weixin_js_signPackage($signPackage=array())
 {
+	if ( is_use_weixin()==false ) {
+		return true;
+		}
 			$settings=globaSetting();
 	  $timestamp = time();
     $nonceStr =weixin_createNonceStr(16);
@@ -385,6 +427,9 @@ function weixin_js_signPackage($signPackage=array())
 
 	  function weixin_address_signInfo($url,$signPackage)
 	{
+		if ( is_use_weixin()==false ) {
+		return true;
+		}
 	$weixintoken=weixin_code_access_token();
 		$accesstoken=$weixintoken['access_token'];
 		
@@ -414,7 +459,7 @@ function weixin_js_signPackage($signPackage=array())
 	
 
 
-	}
+
 	
 	
 	 function weixin_createNonceStr($length = 16) {

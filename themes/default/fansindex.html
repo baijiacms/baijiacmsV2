@@ -180,10 +180,7 @@
 
     <ul class="side-nav">
 
-        <!--@php  if($is_login){@-->
-            <!--@php  if(!empty($weixinfans)&&$_CMS['addons_bj_qrcode']&&$hasqrcode){@-->
- <li><a href="<!--@php  echo create_url('mobile',array('name' => 'bj_qrcode','do' => 'qrcode'));@-->">&nbsp;&nbsp;<i class="icon-edit icon_i"></i>&nbsp;<span class="text">专属二维码</span><i class="arrow"></i></a></li>
-     <!--@php  } @-->
+
         <li><a href="<!--@php  echo mobile_url('member')@-->">&nbsp;&nbsp;<i class="icon-edit icon_i"></i>&nbsp;<span
                 class="text">资料修改</span><i class="arrow"></i></a></li>
 
@@ -198,6 +195,9 @@
         <li><a href="<!--@php  echo mobile_url('logout')@-->">&nbsp;&nbsp;<i class="icon-off icon_i"></i>&nbsp;<span
                 class="text">安全退出</span><i class="arrow"></i></a></li>
         <!--@php  } @-->
+        
+       
+        
         <!--@php  }else{@-->
 
         <li><a href="<!--@php  echo mobile_url('login')@-->">&nbsp;&nbsp;<i class="icon-signout icon_i"></i>&nbsp;<span

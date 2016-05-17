@@ -27,6 +27,38 @@
 		{
 			$pwd='';
 		}
+		if(!empty($cfg['regsiter_usesms'])&&empty($_GP['fromsmspage']))
+		{
+				  system_sms_send($_GP['mobile'],'register_user',"SMS_5022016","注册验证");
+					  	include themePage('register_smscheck');
+					  	exit;
+		}
+		$doaction=true;
+		if(!empty($cfg['regsiter_usesms']))
+		{
+			$doaction=false;
+				if(!empty($_GP['fromsmspage']))
+			{
+					if(empty($_GP['mobilecode']))
+					{
+						message("验证码不能空");	
+					}
+					
+						  $vcode_check=system_sms_validate($_GP['mobile'],'register_user',$_GP['mobilecode']);
+						  if( $vcode_check)
+						  {
+						
+						    $doaction=true;	
+						  }else
+						  {
+						
+						  	  message("验证码错误");	
+						  	  
+						  }
+			}
+		}
+		if($doaction)
+		{
 		$shop_regcredit=intval($cfg['shop_regcredit']);
 		
 		$openid=date("YmdH",time()).rand(100,999);
@@ -60,6 +92,7 @@
 			
 					integration_session_account($loginid,$oldsessionid);
 			  message('注册成功！', to_member_loginfromurl(), 'success');
+			}
 		}
 			$qqlogin = mysqld_select("SELECT * FROM " . table('thirdlogin') . " WHERE enabled=1 and `code`='qq'");
 				if(!empty($qqlogin)&&!empty($qqlogin['id']))

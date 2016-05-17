@@ -1,6 +1,6 @@
 <?php
 defined('SYSTEM_IN') or exit('Access Denied');
-		hasrule('weixin','weixin');
+	
 $settings=globaSetting();
 				   		  
 		$payment = mysqld_select("SELECT * FROM " . table('payment') . " WHERE code = :code", array(':code' => 'weixin'));

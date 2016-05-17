@@ -4,11 +4,51 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 2015 http://www.baijiacms.com All rights reserved.
 // +----------------------------------------------------------------------
-// | Author: 百家威信 <QQ:2752555327> <http://www.baijiacms.com>
+// | Author: baijiacms <QQ:1987884799> <http://www.baijiacms.com>
 // +----------------------------------------------------------------------
 defined('SYSTEM_IN') or exit('Access Denied');
 defined('SYSTEM_INSTALL_IN') or exit('Access Denied');
 $sql = "
+CREATE TABLE IF NOT EXISTS `baijiacms_system_rule` (
+  `modname` varchar(15) DEFAULT NULL,
+  `moddo` varchar(15) DEFAULT NULL,
+  `rule_name` varchar(100) DEFAULT NULL,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `baijiacms_user_group` (
+  `createtime` int(10) NOT NULL,
+  `groupName` varchar(100) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of baijiacms_user_group
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for baijiacms_user_group_rule
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `baijiacms_user_group_rule` (
+	`rule_name` varchar(100) DEFAULT NULL,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `gid` int(10) NOT NULL,
+  `modname` varchar(15) NOT NULL,
+  `moddo` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS  `baijiacms_sms_cache` (
+  `createtime` int(10) NOT NULL,
+  `checkcount` int(3) NOT NULL,
+  `smstype` varchar(50) DEFAULT NULL,
+  `tell` varchar(50) DEFAULT NULL,
+  `vcode` varchar(50) DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE IF NOT EXISTS  `baijiacms_paylog_alipay` (
   `createtime` int(10) NOT NULL,
   `alipay_safepid` varchar(50) DEFAULT NULL,
@@ -889,6 +929,9 @@ DROP TABLE IF EXISTS `baijiacms_user`;
 CREATE TABLE `baijiacms_user` (
   `createtime` int(10) NOT NULL,
   `password` varchar(50) NOT NULL,
+  `groupName` varchar(100) NOT NULL DEFAULT '',
+  `is_admin` int(1) NOT NULL DEFAULT '0' COMMENT '1管理员0用户',
+  `groupid` int(10) NOT NULL DEFAULT '0' COMMENT '用户组id',
   `username` varchar(50) NOT NULL,
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
@@ -903,6 +946,7 @@ CREATE TABLE `baijiacms_user` (
 -- ----------------------------
 DROP TABLE IF EXISTS `baijiacms_user_rule`;
 CREATE TABLE `baijiacms_user_rule` (
+	`rule_name` varchar(100) DEFAULT NULL ,
   `moddo` varchar(15) NOT NULL,
   `modname` varchar(15) NOT NULL,
   `uid` int(10) NOT NULL,

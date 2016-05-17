@@ -15,9 +15,17 @@
 			{
 				$avatar=$weixinfans['avatar'];
 			}
+		
 			if($is_login)
 			{
 					$fansindex_menu_list = mysqld_selectall("SELECT * FROM " . table('shop_diymenu')." where menu_type='fansindex' order by torder desc" );	
+					if(!empty($avatar)&&empty($member['avatar']))
+					{
+						mysqld_update('member',array('avatar'=>$avatar),array('openid'=>$member['openid']));
+						
+					}
+					
+					
 			}
 		
 		$nologout=false;	

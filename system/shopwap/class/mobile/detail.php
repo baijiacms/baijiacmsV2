@@ -6,7 +6,7 @@
       
         require(WEB_ROOT.'/system/common/extends/class/shopwap/class/mobile/detail_1.php');
 				
-         $ccategoods = mysqld_selectall("SELECT * FROM " . table('shop_goods') . " WHERE pcate = :pcate", array(':pcate' => $goods['pcate']));
+         $ccategoods = mysqld_selectall("SELECT * FROM " . table('shop_goods') . " WHERE pcate = :pcate and deleted =0 and status=1", array(':pcate' => $goods['pcate']));
          $allgoods = mysqld_selectcolumn("SELECT count(*) FROM " . table('shop_goods') . " WHERE deleted =0");
        
         $bonus_type= mysqld_selectall("select bonus_type.* from " . table("bonus_good")." bonus_good left join " . table("bonus_type")." bonus_type on bonus_type.type_id=bonus_good.bonus_type_id where bonus_good.good_id=:good_id ",array(":good_id"=>$goods['id']));

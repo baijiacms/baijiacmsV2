@@ -11,7 +11,6 @@
                     		
                     }
                   }
-                  
                    	if(CUSTOM_VERSION==true&&is_file(CUSTOM_ROOT.'/common/extends/class/shop/class/web/goods_1.php'))
 			{
   			require(CUSTOM_ROOT.'/common/extends/class/shop/class/web/goods_1.php');

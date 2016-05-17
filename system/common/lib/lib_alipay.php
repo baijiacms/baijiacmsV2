@@ -4,10 +4,10 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 2015 http://www.baijiacms.com All rights reserved.
 // +----------------------------------------------------------------------
-// | Author: 百家威信 <QQ:2752555327> <http://www.baijiacms.com>
+// | Author: baijiacms <QQ:1987884799> <http://www.baijiacms.com>
 // +----------------------------------------------------------------------
 defined('SYSTEM_IN') or exit('Access Denied');
-$alipaythirdlogin = mysqld_select("SELECT * FROM " . table('thirdlogin') . " WHERE enabled=1 and `code`='alipay'");
+$alipaythirdlogin = mysqld_select("SELECT id FROM " . table('thirdlogin') . " WHERE enabled=1 and `code`='alipay'");
 
 if(!empty($alipaythirdlogin)&&!empty($alipaythirdlogin['id']))
 {

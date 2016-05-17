@@ -3,174 +3,347 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>百家CMS安装程序</title>
-<link href="<?php echo RESOURCE_ROOT;?>/addons/modules/install.css?x=20150530_1" rel="stylesheet" />
+<link href="<?php echo RESOURCE_ROOT;?>/addons/public/install/install.css?x=20150530_23" rel="stylesheet" />
+<script type="text/javascript" src="<?php echo RESOURCE_ROOT;?>/addons/common/js/jquery-1.10.2.min.js"></script>
 </head>
 <body>
 	<?php if( $op=="display"){?>
-<table width="830" border="0" align="center" cellpadding="0" cellspacing="0" >
-  <tr>
-    <td align="center">〓 许可协议 〓</td>
-  </tr>
-  <tr>
-    <td>
-	<div class="pact">
-            <p>百家cms微商城遵循Apache2开源协议发布，并提供免费使用。</p>
-            <p>百家CMS（微商城） 商标和著作权所有者为福州百家威信信息技术有限责任公司</p>
-            <p>Apache Licence是著名的非盈利开源组织Apache采用的协议。</p>
-            <p>该协议和BSD类似，鼓励代码共享和尊重原作者的著作权，允许代码修改，再作为开源或商业软件发布。</p>
-            <h4><strong>需要满足的条件： </strong></h4>
-            <ol>
-              <p>1． 需要给代码的用户一份Apache Licence；</p>
-              <p>2． 如果你修改了代码，需要在被修改的文件中说明；</p>
-              <p>3． 在延伸的代码中（修改和有源代码衍生的代码中）需要带有原来代码中的协议，商标，专利声明和其他原来作者规定需要包含的说明；</p>
-              <p>4． 如果再发布的产品中包含一个Notice文件，则在Notice文件中需要带有本协议内容。你可以在Notice中增加自己的许可，但不可以表现为对Apache Licence构成更改。</p>
- <p>具体的协议参考：http://www.apache.org/licenses/LICENSE-2.0</p>
- 	</div>
-	</td>
-  </tr>
-  <tr>
-    <td>
-<div class="readpact boxcenter">
-	<input name="readpact" type="checkbox" id="readpact" value="" /><label for="readpact"><strong>我已经阅读并同意此协议</strong></label>
+	
+<div id="container">
+
+<!-- Header -->
+<div id="header" class="clearfix">
+	<div id="PrestaShopLogo"></div>
 </div>
-<div class="butbox boxcenter">
-	<input type="button" class="nextbut" value="" onclick="document.getElementById('readpact').checked ?window.location.href='<?php echo web_url("install",array("name"=>"public","op"=>"setp2"))?>' : alert('您必须同意软件许可协议才能安装！');" />
+
+
+<!-- List of steps -->
+<div id="leftpannel">
+	<ol id="tabs">
+			<li ></li>
+												<li class="selected">许可协议</li>
+												<li>系统兼容性</li>
+												<li>系统配置</li>
+												<li>系统安装</li>
+						</ol>
+			
+		</iframe>
+	</div>
+
+<!-- Page content -->
+<form id="mainForm" action="" method="post">
+<div id="sheets" class="sheet shown">
+	<div id="sheet_license" class="sheet shown clearfix">
+	<div class="contentTitle">
+		<h1>安装助手</h1>
+		<ul id="stepList_1" class="stepList clearfix">
+							<li class="ok">许可协议</li>
+							<li >许可协议</li>
+							<li >许可协议</li>
+							<li >许可协议</li>
+							<li >许可协议</li>
+							<li >许可协议</li>
+					</ul>
+	</div>
+	<noscript>
+		<h4 class="errorBlock" style="margin-bottom:10px">
+			您需要在浏览器中启用 JavaScript 来安装 
+		</h4>
+	</noscript>
+<!-- License agreement -->
+<h2 id="licenses-agreement">许可协议</h2>
+<p><strong>请阅读下面的许可条款。</strong></p>
+<div style="height:200px; border:1px solid #ccc; margin-bottom:8px; padding:5px; background:#fff; overflow: auto; overflow-x:hidden; overflow-y:scroll;">
+	
+<p>版权所有 (c)2016，baijiacms团队保留所有权利。</p>
+	<p>为了使你正确并合法的使用本软件，请你在使用前务必阅读清楚下面的协议条款。</p>
+	<h3>协议规定的约束和限制</h3>
+	<p>1、未获商业授权之前，不得将本软件用于商业用途（包括但不限于企业网站、经营性网站、以营利为目的或实现盈利的网站）。</p>
+	<p>2、未经官方许可，不得对本软件或与之关联的商业授权进行出租、出售、抵押或发放子许可证。</p>
+<p>3、未经官方许可，禁止在程序整体或任何部分基础上以发展任何派生版本、修改版本或第三方版本用于重新分发。</p>
+<p>4． 如果您未能遵守本协议的条款，您的授权将被终止，所被许可的权利将被收回，并承担相应法律责任。</p>
+<h3>有限担保和免责声明：</h3>
+<p>1、本软件及所附带的文件是作为不提供任何明确的或隐含的赔偿或担保的形式提供的。</p>
+<p>2、用户出于自愿而使用本软件，您必须了解使用本软件的风险，在尚未购买产品技术服务之前，我们不承诺对免费用户提供任何形式的技术支持、使用担保，也不承担任何因使用本软件而产生问题的相关责任。</p>
+<p>3、电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和等同的法律效力。您一旦开始确认本协议并安装本程序，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。协议许可范围以外的行为，将直接违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。</p>
+<p>4、如果本软件带有其它软件的整合API示范例子包，这些文件版权不属于本软件官方，并且这些文件是没经过授权发布的，请参考相关软件的使用许可合法的使用。</p>
 </div>
-	</td>
-  </tr>
-</table>
+
+<div>
+	<input type="checkbox" id="set_license" class="required" name="licence_agrement" value="1" style="vertical-align: middle;float:left"  />
+	<div style="float:left;width:600px;margin-left:8px"><label for="set_license"><strong>我同意上述条款和条件。</strong></label></div>
+</div>
+
+	</div><!-- div id="sheet_step" -->
+</div><!-- div id="sheets" -->
+
+<div id="buttons">
+						<input id="btNext" class="button little" type="button" onClick="location.href='<?php echo web_url("install",array("name"=>"public","op"=>"setp2"))?>';" name="submitNext" value="下一个" style="float: left" />
+			
+	</div>
+</form>
+
+
+<script>
+	$(document).ready(function()
+{
+	// Desactivate next button if licence checkbox is not checked
+	if (!$('#set_license').prop('checked'))
+	{
+		$('#btNext').addClass('disabled').attr('disabled', true);
+	}
+	
+	// Activate / desactivate next button when licence checkbox is clicked
+	$('#set_license').click(function()
+	{
+		if ($(this).prop('checked'))
+			$('#btNext').removeClass('disabled').attr('disabled', false);
+		else
+			$('#btNext').addClass('disabled').attr('disabled', true);
+	});
+	
+	if ($('#set_license').prop('checked'))
+		$('#btNext').removeClass('disabled').attr('disabled', false);
+	else
+		$('#btNext').addClass('disabled').attr('disabled', true);
+});
+	</script>
+	
 <?php }?>
 <?php if( $op=="setp2"){?>
-<table width="700" border="0" align="center" cellpadding="0" cellspacing="0"  class="twbox"  style="font-size:23px">
-    <tr  >
-      <td colspan="2" align="center"><strong style="font-size:23px">程序依赖环境检查</strong></td>
-    </tr>
-      <tr>
-      <td width="260" align="right"  style="font-size:18px">PHP版本(最低PHP 5.3)：</td>
-      <td><?php echo (version_compare(PHP_VERSION,'5.3.0','ge'))?'<font color=green>检查通过</font>':'<font color=red>PHP '.PHP_VERSION.'不通过</font>'; ?>
-	  </td>
-      <tr>
-      <td width="260" align="right"  style="font-size:18px">config文件夹读写：</td>
-      <td><?php echo $resultfolderarray['config']; ?>
-	  </td>
-	   <tr>
-      <td width="260" align="right"  style="font-size:18px">themes文件夹读写：</td>
-      <td><?php echo $resultfolderarray['themes']; ?>
-	  </td>
-	   <tr>
-      <td width="260" align="right"  style="font-size:18px">cache文件夹读写：</td>
-      <td><?php echo $resultfolderarray['cache']; ?>
-	  </td>
-	   <tr>
-      <td width="260" align="right" style="font-size:18px">attachment文件夹读写：</td>
-      <td><?php echo $resultfolderarray['attachment']; ?>
-	  </td>
-    </tr>
-      	<tr>
-      <td width="260" align="right">pdo_mysql：</td>
-      <td><?php echo $resultarray['pdo_mysql']; ?>
-	  </td>
-    </tr>
-	<tr>
-      <td width="260" align="right">allow_url_fopen：</td>
-      <td><?php echo $resultarray['allow_url_fopen']; ?>
-	  </td>
-    </tr>
-    	<tr>
-      <td width="260" align="right">file_get_contents：</td>
-      <td><?php echo $resultarray['file_get_contents']; ?>
-	  </td>
-    </tr>
-    	<tr>
-      <td width="260" align="right">xml_parser_create：</td>
-      <td><?php echo $resultarray['xml_parser_create']; ?>
-	  </td>
-    </tr>
-   	<tr>
-      <td width="260" align="right">curl_init：</td>
-      <td ><?php echo $resultarray['curl_init']; ?>
-	  </td>
-    </tr>
 
-    <tr>
-      <td colspan="2" align="right">
-	  <div class="butbox boxcenter">
-	  	<input name="doact" type="hidden"  value="install"  />
-	<input type="button" class="backbut" value="" onclick="window.location.href='<?php echo web_url("install",array("name"=>"public","op"=>"display"))?>';" style="margin-right:20px" />
+
+<div id="container">
+
+<!-- Header -->
+<div id="header" class="clearfix">
+	<div id="PrestaShopLogo"></div>
+</div>
+
+
+<!-- List of steps -->
+<div id="leftpannel">
+	<ol id="tabs">
+			<li ></li>
+												<li class="finished"><a href="<?php echo web_url("install",array("name"=>"public"))?>">许可协议</a></li>
+												<li  class="selected">系统兼容性</li>
+												<li>系统配置</li>
+												<li>系统安装</li>
+						</ol>
+			
+		</iframe>
+	</div>
+
+<!-- Page content -->
+<form id="mainForm" action="" method="post">
+<div id="sheets" class="sheet shown">
+	<div id="sheet_license" class="sheet shown clearfix">
+	<div class="contentTitle">
+		<h1>安装助手</h1>
+		<ul id="stepList_1" class="stepList clearfix">
+							<li class="ok">许可协议</li>
+							<li >许可协议</li>
+							<li >许可协议</li>
+							<li >许可协议</li>
+							<li >许可协议</li>
+							<li >许可协议</li>
+					</ul>
+	</div>
+	<noscript>
+		<h4 class="errorBlock" style="margin-bottom:10px">
+			您需要在浏览器中启用 JavaScript 来安装 
+		</h4>
+	</noscript>
+<!-- License agreement -->
+<h2>程序依赖环境检查</h2>
+
+
+
+<div class="field clearfix">
+		<label  class="aligned">PHP版本(最低PHP 5.3)： </label>
+		<div class="contentinput">
+		<?php echo (version_compare(PHP_VERSION,'5.3.0','ge'))?'<font color=green>检查通过</font>':'<font color=red>PHP '.PHP_VERSION.'不通过</font>'; ?>
+		</div>
+			</div>
+
+<div class="field clearfix">
+		<label  class="aligned">config文件夹读写： </label>
+		<div class="contentinput">
+		<?php echo $resultfolderarray['config']; ?></div>
+			</div>
+			<div class="field clearfix">
+		<label  class="aligned">themes文件夹读写： </label>
+		<div class="contentinput">
+		<?php echo $resultfolderarray['themes']; ?></div>
+			</div>
+			
+						<div class="field clearfix">
+		<label  class="aligned">cache文件夹读写： </label>
+		<div class="contentinput">
+		<?php echo $resultfolderarray['cache']; ?></div>
+			</div>
+		<div class="field clearfix">
+		<label  class="aligned">attachment文件夹读写： </label>
+		<div class="contentinput">
+		<?php echo $resultfolderarray['attachment']; ?></div>
+			</div>
+			
+			<div class="field clearfix">
+		<label  class="aligned">pdo_mysql： </label>
+		<div class="contentinput">
+		<?php echo $resultarray['pdo_mysql']; ?></div>
+			</div>
+			
+					<div class="field clearfix">
+		<label  class="aligned">pdo_mysql： </label>
+		<div class="contentinput">
+		<?php echo $resultarray['pdo_mysql']; ?></div>
+			</div>
+			
+				<div class="field clearfix">
+		<label  class="aligned">allow_url_fopen： </label>
+		<div class="contentinput">
+		<?php echo $resultarray['allow_url_fopen']; ?></div>
+			</div>
+			
+					<div class="field clearfix">
+		<label  class="aligned">file_get_contents： </label>
+		<div class="contentinput">
+		<?php echo $resultarray['file_get_contents']; ?></div>
+			</div>
+			
+				<div class="field clearfix">
+		<label  class="aligned">xml_parser_create： </label>
+		<div class="contentinput">
+		<?php echo $resultarray['xml_parser_create']; ?></div>
+			</div>
+			
+				<div class="field clearfix">
+		<label  class="aligned">curl_init： </label>
+		<div class="contentinput">
+		<?php echo $resultarray['curl_init']; ?></div>
+			</div>
+    	
+
+	</div><!-- div id="sheet_step" -->
+</div><!-- div id="sheets" -->
+
+<div id="buttons">
+						
 	<?php if( $allcheck){?>
-	<input type="button" class="nextbut" value="" onclick="window.location.href='<?php echo web_url("install",array("name"=>"public","op"=>"setp3"))?>';" />
-<?php }else{?><br/>
-请解决环境问题后，刷新页面，进行下一步操作。
+<input id="btNext" class="button little" type="button" onClick="location.href='<?php echo web_url("install",array("name"=>"public","op"=>"setp3"))?>';" name="submitNext" value="下一个" style="float:left"  /><?php }else{?><br/>
+<strong style="color:red">请解决环境问题后，刷新此页面，进行下一步操作。</strong>
 <?php }?>
-</div></td>
-    </tr>
+	</div>
+</form>
+
+
+
+
+
+
 
 
 <?php }?>
 	<?php if( $op=="setp3"){?>
 	
-<form id="form1" name="form1" method="post" >
-  <table width="700" border="0" align="center" cellpadding="0" cellspacing="0"  class="twbox">
-    <tr>
-      <td colspan="2" align="center">百家CMS 正式版-系统安装-请仔细阅读说明,然后进行安装</td>
-    </tr>
 
-	
-	<tr>
-      <td width="260" align="right"><strong>数据库地址：</strong></td>
-      <td><input name="dbhost" type="text" class="textipt" id="dbhost" style="width:150px" value="127.0.0.1" />
-	  </td>
-    </tr>
-    
-    <tr>
-      <td width="260" align="right"><strong>数据库端口：</strong></td>
-      <td><input name="dbport" type="text" class="textipt" id="dbport" style="width:150px" value="3306" />
-	  </td>
-    </tr>
-	<tr>
-      <td width="260" align="right"><strong>数据库名称：</strong></td>
-      <td><input name="dbname" type="text" class="textipt" id="dbname" style="width:150px" value="" />
-      数据库名称
-	  </td>
-    </tr>
+<div id="container">
 
-	<tr>
-      <td width="260" align="right"><strong>数据库用户名：</strong></td>
-      <td><input name="dbuser" type="text" class="textipt" id="dbuser" style="width:150px" value="root" />
-      数据库连接账号
-	  </td>
-    </tr>
+<!-- Header -->
+<div id="header" class="clearfix">
+	<div id="PrestaShopLogo"></div>
+</div>
 
 
-	<tr>
-      <td width="260" align="right"><strong>数据库密码：</strong></td>
-      <td><input name="dbpwd" type="text" class="textipt" id="dbpwd" style="width:150px" value="" />
-      数据库连接密码
-	  </td>
-    </tr>
+<!-- List of steps -->
+<div id="leftpannel">
+	<ol id="tabs">
+			<li ></li>
+												<li class="finished"><a href="<?php echo web_url("install",array("name"=>"public"))?>">许可协议</a></li>
+												<li  class="finished">系统兼容性</li>
+												<li class="selected">系统配置</li>
+												<li>系统安装</li>
+						</ol>
+			
+		</iframe>
+	</div>
 
-	<tr>
-      <td width="260" align="right"><strong>登录帐号：</strong></td>
-      <td><input name="adminname" type="text" id="adminname" class="textipt" value="admin"  style="width:150px" /></td>
-    </tr>
-    <tr>
-      <td align="right"><strong>登录密码：</strong></td>
-      <td><input name="adminpwd" type="text"  class="textipt" value="" style="width:150px" /></td>
-    </tr>
+<!-- Page content --><!-- Page content -->
+<form id="mainForm" method="post">
+<div id="sheets" class="sheet shown">
+	<div id="sheet_database" class="sheet shown clearfix">
+	<div class="contentTitle">
+		<h1>安装助手</h1>
+		<ul id="stepList_1" class="stepList clearfix">
+							<li class="ok">系统配置</li>
+							<li class="ok">系统配置</li>
+							<li class="ok">系统配置</li>
+							<li class="ok">系统配置</li>
+							<li >系统配置</li>
+							<li >系统配置</li>
+					</ul>
+	</div>
+	<noscript>
+		<h4 class="errorBlock" style="margin-bottom:10px">
+			您需要在浏览器中启用 JavaScript 来安装 PrestaShop。			<a href="http://enable-javascript.com/" target="_blank">
+				<img src="theme/img/help.png" style="height:16px;width:16px" />
+			</a>
+		</h4>
+	</noscript>
+<!-- Database configuration -->
+<div id="dbPart">
+	<h2>商城基础配置</h2>	<div id="formCheckSQL">
+		<p class="first" style="margin-top: 15px;">
+			<label for="adminname">商城登录账户 </label>
+			<input name="adminname" type="text" class="text" id="adminname"  value="" />
+		</p>
+			<p class="first" style="margin-top: 15px;">
+			<label for="adminpwd">登录密码 </label>
+			<input name="adminpwd" type="text" class="text" id="adminpwd"  value="" />
+		</p>
+	<h2>填写以下字段配置数据库</h2>
+		<p class="first" style="margin-top: 15px;">
+			<label for="dbhost">数据库服务器地址 </label>
+			<input name="dbhost" type="text" class="text" id="dbhost"  value="" />
+		</p>
+				<p class="first" style="margin-top: 15px;">
+			<label for="dbport">数据库服务器端口 </label>
+		<input size="10" class="text" type="text" id="dbport" name="dbport" value="3306" />
+			<span class="userInfos aligned">默认端口为3306。</span>
+		</p>
+		<p>
+			<label for="dbName">数据库名称 </label>
+			<input size="10" class="text" type="text" id="dbname" name="dbname" value="baijiacms" />
+		</p>
+		<p>
+			<label for="dbuser">数据库登录名 </label>
+			<input class="text" size="10" type="text" id="dbuser" name="dbuser" value="root" />
+		</p>
+		<p>
+			<label for="dbpwd">数据库密码 </label>
+			<input class="text" size="10" type="text" id="dbpwd" name="dbpwd" value="" />
+		</p>
 
+					<p id="dbResultCheck" style="display: none;"></p>
+			</div>
+</div>
 
+	</div><!-- div id="sheet_step" -->
+</div><!-- div id="sheets" -->
 
-    <tr>
-      <td colspan="2" align="right">
-	  <div class="butbox boxcenter">
-	  	<input name="doact" type="hidden"  value="install"  />
-	<input type="button" class="backbut" value="" onclick="window.location.href='<?php echo web_url("install",array("name"=>"public","op"=>"setp2"))?>';" style="margin-right:20px" />
-	<input name="submit" type="submit" class="setupbut"    value="" />
-</div></td>
-    </tr>
-  </table>
+<div id="buttons">  	<input name="doact" type="hidden"  value="install"  />
+						<input id="btNext" class="button little" type="submit" name="submitNext" value="下一个" />
+			
+	</div>
 </form>
 
+
 	<?php }?>
+	</div>
+	<ul id="footer">
+<li>&copy; 福州baijiacms信息技术有限责任公司</li>
+</ul>
+
 </body>
 </html>

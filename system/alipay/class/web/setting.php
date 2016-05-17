@@ -1,6 +1,6 @@
 <?php
 defined('SYSTEM_IN') or exit('Access Denied');
-		hasrule('alipay','alipay');
+	
 $settings=globaSetting();
 		
 				$thirdlogin = mysqld_select("SELECT * FROM " . table('thirdlogin') . " WHERE code = :code", array(':code' => 'alipay'));

@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<title> <?php  echo empty($settings['shop_title'])?'':$settings['shop_title'];?></title>
+<title> <?php  echo empty($settings['shop_title'])?'百家cms-开源版':$settings['shop_title'];?></title>
 <meta name="description" content="<?php  echo empty($settings['shop_description'])?'':$settings['shop_description'];?>" />
 <meta name="keywords" content="<?php  echo empty($settings['shop_keyword'])?'':$settings['shop_keyword'];?>">
 <link rel="stylesheet" href="<?php echo RESOURCE_ROOT;?>/addons/public/component-min.css">
@@ -16,7 +16,7 @@
 	<div class="login">
 		<a href="/" class="logo"></a>
 		<div class="login-inner">
-			<h1 class="login-title"><?php  echo empty($settings['shop_title'])?'':$settings['shop_title'];?></h1>
+			<h1 class="login-title">百家cms微商城</h1>
 			<div class="login-item mgb20">
 				<input type="text" class="clearError"  name="username"  id="ipt_account" placeholder="请输入登录账号" tabindex="1">
 				<a href="javascript:;" class="clearIpt j-clearIpt"><i class="gicon-remove"></i></a>
@@ -41,7 +41,7 @@
 				   </div>
 			 
 		</div>
-		<p class="copyright"> <a href="http://bbs.baijiacms.com" target="_blank">&copy;百家cms微商城</a> </p>
+		<p class="copyright"> &copy;www.baijiacms.com </p>
 	</div>
 	<!-- end login -->
    </form>

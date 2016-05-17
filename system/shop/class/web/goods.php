@@ -152,11 +152,15 @@
                 message('抱歉，请您先添加商品分类！', web_url('category', array('op' => 'post')), 'error');
             }
             if (checksubmit('submit')) {
+            
                 if (empty($_GP['goodsname'])) {
                     message('请输入商品名称！');
                 }
                 if (empty($_GP['pcate'])) {
                     message('请选择商品分类！');
+                }
+                	   if (empty($_GP['total'])) {
+                    message('请输入商品库存！');
                 }
                 $data = array(
                     'pcate' => intval($_GP['pcate']),

@@ -10,7 +10,6 @@
 			{
 				unset($account['password']);
 				$_SESSION[WEB_SESSION_ACCOUNT]=$account;
-				checkAddons();
 				header("location:".create_url('site', array('name' => 'public','do' => 'index')));
 		}else
 		{

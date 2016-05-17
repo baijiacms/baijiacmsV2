@@ -24,7 +24,6 @@ if($mod=='mobile')
 if(empty($_REQUEST['do']))
 {
 	$do='shopindex';
-	$_GET['ndzd']=1;
 }else
 {
 	

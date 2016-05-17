@@ -22,6 +22,9 @@ class publicAddons  extends BjSystemModule {
 	{
 			$this->__web(__FUNCTION__);
 	}
+
+	
+	
 	public function check_verify($verify)
 	{
 		

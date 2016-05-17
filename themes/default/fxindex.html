@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>分销中心</title>
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" href="__RESOURCE__/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="__RESOURCE__/css/fansbase.css"/>
+    <link rel="stylesheet" href="__RESOURCE__/css/iconfont.css"/>
+    <script src="__RESOURCE__/js/jquery-1.11.3.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="container">
+    <div class="media ptd10" style="padding-left: 15px">
+        <div class="media-left" style="width: 30%">
+            <a href="#" class="img-thumbnail">
+            	<!--@php  if(empty($avatar)){@--><img style="width: 40px;height: 40px" src="__RESOURCE__/recouse/images/tx.png"/><!--@php  }else{ @--><img style="width: 80px;height: 80px" src="<!--@php  echo $avatar;@-->"/><!--@php  } @-->
+            </a>
+        </div>
+        <div class="media-body" style="width: 70%">
+        	      	<!--@php  if(!empty($member['realname'])){@-->
+                	      <h3 class="media-heading"><!--@php  echo $member['realname'];@-->	</h3>
+                	   	<!--@php }else{ @-->
+                	<!--@php  if(!empty($member['mobile'])){@-->
+                	 <h3 class="media-heading"><!--@php  echo $member['mobile'];@-->	</h3>
+                	   	<!--@php }else{  @-->
+                	   	
+                	 	 <h3 class="media-heading"><!--@php  echo $member['openid'];@-->	</h3>
+                	   	 	<!--@php }  @-->
+                	   		   	<!--@php }  @-->
+        	
+            <p style="margin: 0px">等级：普通分销商</p>
+            <p style="margin: 0px">加入时间：   <!--@php  echo date('Y-m-d', empty($fenxiao_member_relect['agenttime'])?$fenxiao_member_relect['updatetime']:$fenxiao_member_relect['agenttime'])@--></p>
+        </div>
+    </div>
+    <div class="fxjumbotron jumbotron" style="border-radius: 0px;padding-top: 15px;padding-bottom: 5px">
+       <p>
+           已打款佣金：<!--@php  echo $fenxiao_member_relect['commissioned'];@-->元
+           <span class="pull-right"><i class="fa fa-arrow-circle-o-right"></i></span>
+       </p>
+        <p>
+            可提现佣金(元)
+        </p>
+        <p style="line-height:50px;padding-top: 30px">
+            <strong><!--@php  echo $commissioningpe;@--></strong>
+            <a href="<!--@php  echo create_url('mobile',array('name' => 'fenxiao','do' => 'commission','op'=>'commapply'))@-->" class="btn btn-default pull-right">提现</a>
+        </p>
+
+    </div>
+
+    <div class="row">
+        <div class="col-xs-4 bbottom bright">
+         <a href="<!--@php  echo create_url('mobile',array('name' => 'fenxiao','do' => 'commission'))@-->">    <div class="fxd">
+                <p class="fxi1">
+                    <i class="iconfont bjicon-qianbao"></i>
+                </p>
+                <p>收益统计</p>
+                <span><b><!--@php  echo $commissioninall;@--></b>元</span>
+            </div></a>
+        </div>
+        <div class="col-xs-4 bbottom bright">
+           <a href="<!--@php  echo create_url('mobile',array('name' => 'fenxiao','do' => 'myfansDetail','level'=>1))@-->">   <div class="fxd">
+                <p class="fxi2">
+                    <i class="iconfont bjicon-guanyuwomenicon"></i>
+                </p>
+                <p>我的团队</p>
+                <span><b><!--@php  echo  $totalmember;@--></b>伙伴</span>
+            </div></a>
+        </div>
+        <div class="col-xs-4 bbottom">
+           <a href="<!--@php  echo create_url('mobile',array('name' => 'fenxiao','do' => 'fansorder'))@-->">    <div class="fxd">
+                <p class="fxi3">
+                    <i class="iconfont bjicon-shangpu"></i>
+                </p>
+                <p>店铺订单</p>
+                <span><b><!--@php  echo $allcount;@--></b>笔</span>
+            </div></a>
+        </div>
+
+        <div class="col-xs-4 bbottom bright">
+          <a href="<!--@php  echo create_url('mobile',array('name' => 'fenxiao','do' => 'qrcode'))@-->">    <div class="fxd">
+                <p class="fxi4">
+                    <i class="iconfont bjicon-iconfonterweima"></i>
+                </p>
+                <p>二维码</p>
+                <span>推广二维码</span>
+            </div></a>
+        </div>
+        <div class="col-xs-4 bbottom bright">
+            <a href="<!--@php  echo create_url('mobile',array('name' => 'fenxiao','do' => 'dzd'))@-->"><div class="fxd">
+                <p class="fxi5">
+                    <i class="iconfont bjicon-tubiao01"></i>
+                </p>
+                <p>设置</p>
+                <span>店铺设置</span>
+            </div> </a>
+        </div>
+        <div class="col-xs-4 bbottom">
+            <div class="fxd">
+
+            </div>
+        </div>
+    </div>
+
+<!--@php  $_CMS['module']='shopwap'; @-->
+    <!--@php  include page('footer');@-->
+
+</div>
+
+<!--@php include themePage('footer');@-->
+
+</body>
+</html>

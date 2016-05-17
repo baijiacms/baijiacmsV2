@@ -5,6 +5,9 @@
                                    <i class="icon-edit"></i>已配送方式管理                          
                                 </a>
                                 <?php  	} ?></h3>
+                                            <div class="alert alert-info" style="margin-left:10px">
+       安装配送方式后，需要添加设置"配送区域"，不在区域内的在购物时不显示。全国区域可单独添加“中国”即可<br>
+    </div>
 <table class="table table-striped table-bordered table-hover">
 			<thead>
 				<tr>

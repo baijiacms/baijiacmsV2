@@ -96,9 +96,9 @@ body{padding-bottom:55px}
  <h2>配送方式</h2>
  <ul class="payStyle">
   	
- 	<!--@php $ischecked=true; if(is_array($dispatch)) { foreach($dispatch as $d) { @-->
+ 	<!--@php $ischecked=true; $initdispatchprice=$issendfree==1?0:$d['price']; if(is_array($dispatch)) { foreach($dispatch as $d) { @-->
   				
-                                   <li><label><input name='dispatch'  onchange='oncheckboxchange("<!--@php echo $issendfree==1?0:$d['price']@-->");' type="radio"  value="<!--@php  echo $d['id'];@-->" <!--@php echo $ischecked?'checked="checked"':'';$ischecked=false;  @--> /><img src="__RESOURCE__/recouse/images/icon-wein.png" /><!--@php  echo $d['dname'];@--></label></li>
+                                   <li><label><input name='dispatch'  onchange='oncheckboxchange("<!--@php if($ischecked){$initdispatchprice=$issendfree==1?0:$d['price'];} echo $issendfree==1?0:$d['price']@-->");' type="radio"  value="<!--@php  echo $d['id'];@-->" <!--@php echo $ischecked?'checked="checked"':'';$ischecked=false;  @--> /><img src="__RESOURCE__/recouse/images/icon-wein.png" /><!--@php  echo $d['dname'];@--></label></li>
                           
                         <!--@php  } } @-->
  
@@ -320,6 +320,9 @@ function get_search_box(){
                 }
                 
             }
+            
+            
+            oncheckboxchange(<!--@php echo empty($initdispatchprice)?"0":$initdispatchprice;@-->);
  </script>
             
  

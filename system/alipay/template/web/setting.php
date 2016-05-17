@@ -7,7 +7,7 @@
 										<label class="col-sm-2 control-label no-padding-left" > 服务窗名称：</label>
 
 										<div class="col-sm-9">
-										     <input type="text" name="alipay_name" class="col-xs-10 col-sm-4" value="<?php  echo $settings['alipay_name'];?>" />&nbsp&nbsp;&nbsp;<a href="http://bbs.baijiacms.com/forum-36-1.html" target="_blank" style="font-size:16px"><strong>配置帮助</strong></a>
+										     <input type="text" name="alipay_name" class="col-xs-10 col-sm-4" value="<?php  echo $settings['alipay_name'];?>" />
 										</div>
 									</div>
 									

@@ -1,4 +1,9 @@
 <?php
+ if($_CMS['addons_bj_tbk'])
+			        {
+			        	bj_tbk_sendxjdlshtz($orderid);
+			        	  		 bj_tbk_checkexist_member_relect($openid);
+			        }
  if($_CMS['addons_bj_message']) {
 	 	
 

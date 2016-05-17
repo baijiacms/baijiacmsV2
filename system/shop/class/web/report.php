@@ -13,8 +13,8 @@ require_once WEB_ROOT.'/includes/lib/phpexcel/PHPExcel.php';
 $objPHPExcel = new PHPExcel();
 
 // Set document properties
-$objPHPExcel->getProperties()->setCreator("百家威信")
-							 ->setLastModifiedBy("百家威信")
+$objPHPExcel->getProperties()->setCreator("baijiacms")
+							 ->setLastModifiedBy("baijiacms")
 							 ->setTitle("Office 2007 XLSX Test Document")
 							 ->setSubject("Office 2007 XLSX Test Document")
 							 ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")

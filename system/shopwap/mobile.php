@@ -3,6 +3,44 @@ defined('SYSTEM_IN') or exit('Access Denied');
 
 require WEB_ROOT.'/system/member/lib/rank.php';
 class shopwapAddons  extends BjSystemModule {
+		public function do_index_pc()
+	{
+					$settings=globaSetting();
+				$qrurl=$this->create_qrcode(WEBSITE_ROOT.mobile_url('shopindex'));
+	        	include page('index_pc');
+	}
+
+		   function create_qrcode($homeurl)
+  {
+  	$att_target_file = 'shopindex_qrcode.png';
+		$qr_dir='/cache/'.SESSION_PREFIX.'/qrcode/url/';
+		$qrcode_dir=WEB_ROOT.$qr_dir;
+		if(!file_exists($qrcode_dir. $att_target_file))
+		{
+  	include WEB_ROOT.'/includes/lib/phpqrcode/phpqrcode/phpqrcode.php';//引入PHP QR库文件
+		$value=$homeurl;
+		$errorCorrectionLevel = "L";
+		$matrixPointSize = "4";
+
+
+		if (!is_dir($qrcode_dir))
+		{
+			mkdirs($qrcode_dir);
+		}
+		$target_file = $qrcode_dir. $att_target_file;
+		
+		QRcode::png($value, $target_file, $errorCorrectionLevel, $matrixPointSize);
+		}
+  	return 	WEBSITE_ROOT.$qr_dir.$att_target_file;
+  }
+		public function do_time_goodlist()
+	{
+			$this->__mobile(__FUNCTION__);
+	}
+	public function do_repwd()
+	{
+			$this->__mobile(__FUNCTION__);
+	}
 	public function do_logoutmobile()
 	{
 			$this->__mobile(__FUNCTION__);

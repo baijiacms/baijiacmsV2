@@ -4,13 +4,10 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 2015 http://www.baijiacms.com All rights reserved.
 // +----------------------------------------------------------------------
-// | Author: 百家威信 <QQ:2752555327> <http://www.baijiacms.com>
+// | Author: baijiacms <QQ:1987884799> <http://www.baijiacms.com>
 // +----------------------------------------------------------------------
+(defined('SYSTEM_ACT') or defined('LOCK_TO_INSTALL')) or exit('Access Denied');
 define('WEB_ROOT', str_replace("\\",'/', dirname(dirname(__FILE__))));
-if(is_file(WEB_ROOT.'/config/version.php'))
-{
-	require WEB_ROOT.'/config/version.php';
-}
 if(is_file(WEB_ROOT.'/config/debug.php'))
 {
 	require WEB_ROOT.'/config/debug.php';
@@ -19,8 +16,8 @@ if(is_file(WEB_ROOT.'/config/custom.php'))
 {
 	require WEB_ROOT.'/config/custom.php';
 }
-define('SAPP_NAME', '百家CMS微商城');
-define('CORE_VERSION', 20160113);
+define('SAPP_NAME', '百家CMS微商城V2.7');
+define('CORE_VERSION', 20160517);
 defined('SYSTEM_VERSION') or define('SYSTEM_VERSION', CORE_VERSION);
 header('Content-type: text/html; charset=UTF-8');
 define('SYSTEM_WEBROOT', WEB_ROOT);
@@ -43,6 +40,7 @@ define('MAGIC_QUOTES_GPC', (function_exists('get_magic_quotes_gpc') && get_magic
 if(!session_id())
 {
 session_start();
+header("Cache-control:private");
 }
 if(DEVELOPMENT) {
 	ini_set('display_errors','1');
@@ -134,10 +132,6 @@ $bjconfig['db']['charset'] = 'utf8';
 $_CMS['config'] = $bjconfig;
 $_CMS['module']=$modulename;
 $_CMS[WEB_SESSION_ACCOUNT]=$_SESSION[WEB_SESSION_ACCOUNT];
-define('UPDATE_GETVERSION_URL', "http://m.baijiacms.com/getversion.php?do=url");
-define('UPDATE_GETVERSION', "http://m.baijiacms.com/getversion.php?do=version");
-define('VERSION_GETSTATIC', "http://m.baijiacms.com/getstatic.php");
-
 function mysqldb() {
 	global $_CMS;
 	static $db;
@@ -464,48 +458,63 @@ function checklogin()
 }
 function hasrule($modname,$moddo)
 {
+		
 		if(checkrule($modname,$moddo)==false)
 					{
 					message("您没有权限操作此功能");	
+					return false;
 					}
+			return true;
+					
+					
 }
 function checkrule($modname,$moddo)
 {
 	global $_CMS;
-		$account=$_CMS[WEB_SESSION_ACCOUNT];
-		if(empty($_SESSION["SYSTEM_RULE"]))
-		{
-				$limitrule = mysqld_selectall('SELECT * FROM '.table('rule'));
-				
-				$system_rule=array();
-				foreach($limitrule as  $item){
-						$system_rule[]=array('modname'=>$item['modname'],'moddo'=>$item['moddo']);
-				}
-				$_SESSION["SYSTEM_RULE"]=$system_rule;
-				
-				
-		}
-		
-		$system_rule=$_SESSION["SYSTEM_RULE"];
-		foreach($system_rule as  $item){
-			
-				if($item['modname']==$modname&&$item['moddo']==$moddo)
+	
+		if($modname!="index"&&$modname!="common"&&$modname!="public")
 				{
 				
+		if($modname!="modules"||($modname=="modules"&&($moddo!="addons_update"&&$moddo!="checkupdate"&&$moddo!="update")))
+		{
 	
-						$userRule = mysqld_selectall('SELECT * FROM '.table('user_rule')." WHERE  uid=:uid and modname=:modname and moddo=:moddo" , array(':uid'=> $_CMS[WEB_SESSION_ACCOUNT]['id'],':modname'=> $modname,':moddo'=> $moddo));
-			
-						if(!empty($userRule))
-						{
-							return true;	
-						}
-					
-					return false;	
-				}
+		$account=$_CMS[WEB_SESSION_ACCOUNT];
+		if(!empty($account['is_admin']))
+		{
+			return true;	
+		}
+		
+		$user = mysqld_select("select * from " . table('user')." where id=:uid", array(':uid'=> $account['id']));
+	  $user_group_rule = mysqld_selectall('SELECT * FROM '.table('user_group_rule')." WHERE  gid=:gid" , array(':gid'=> $user['groupid']));
+		$user_rule_rule = mysqld_selectall('SELECT * FROM '.table('user_rule')." WHERE  uid=:uid" , array(':uid'=> $account['id']));
+								
+		
+			foreach($user_group_rule as  $rule){
+											if(($modname==$rule['modname']&&$rule['moddo']=="ALL")||($modname==$rule['modname']&&$moddo=="ALL")||$modname==$rule['modname']&&$moddo==$rule['moddo'])
+											{
+												return true;
+											}
+										}
+										
+										
+	   			  				
+										foreach($user_rule_rule as  $rule){
+								
+											if(($modname==$rule['modname']&&$rule['moddo']=="ALL")||($modname==$rule['modname']&&$moddo=="ALL")||$modname==$rule['modname']&&$moddo==$rule['moddo'])
+											{
+												return true;
+											}
+										}
+		
+		
+		
+		
+	return false;
+	
 			}
-		
-		
-	return true;
+						}
+					return true;
+	
 	
 }
 function create_url($module, $params = array()) {
@@ -586,37 +595,10 @@ function page($filename) {
 		return $source;
 }
 
-
 function themePage($filename) {
 	global $_CMS;
-	$theme='';
-		$themeconfig=SYSTEM_WEBROOT."/themes/".SESSION_PREFIX."_theme.bjk";
-			if (!is_file($themeconfig)) {
-						$myfile = fopen($themeconfig, "w");
-					fwrite( $myfile,'default');
-					fclose($myfile);
-			}
-	if(empty($_SESSION["theme"])||empty($_SESSION["theme_md5"])||$_SESSION["theme_md5"]!=md5_file($themeconfig))
-	{
-			
-		if (is_file($themeconfig)) { 
-			$myfile = fopen($themeconfig, "r");
-		
-		$theme=fgets($myfile);
-			fclose($myfile);
-		}
-		
-			if(empty($theme))
-			{
-			$theme='default';
-			
-			}
-			$_SESSION["theme"]=$theme;
-			$_SESSION["theme_md5"]=md5_file($themeconfig);
-	}else
-	{
-	$theme=$_SESSION["theme"];
-	}
+	$settings=globaSetting();
+	$theme=$settings['theme'];
 
 	$cachefile=WEB_ROOT.'/cache/'.SESSION_PREFIX.'/'.$theme.'/'.$filename.'.php';
 	$template=SYSTEM_WEBROOT.'/themes/'.$theme.'/'.$filename.'.html';	
@@ -628,16 +610,13 @@ function themePage($filename) {
 			}
 	
 		if (!is_file($cachefile)||DEVELOPMENT) {
-		
-	
 		$str=	file_get_contents($template);
 		
 		$path = dirname($cachefile);
-	if (!is_dir($path))
-	{
-		mkdirs($path);
-	}
-
+		if (!is_dir($path))
+		{
+			mkdirs($path);
+		}
 		$content = preg_replace('/__RESOURCE__/', WEBSITE_ROOT.'themes/'.$theme.'/__RESOURCE__', $str);
 		
 		$content = preg_replace('/<!--@php\s+(.+?)@-->/', '<?php $1?>', $content);
@@ -655,7 +634,7 @@ function clear_theme_cache($path='',$isdir=false)
 {
 	if($isdir==false)
 	{
-	$path=WEB_ROOT.'/cache/'.$path;
+	$path=WEB_ROOT.'/cache/'.SESSION_PREFIX.'/'.$path;
 	}
 	    if(is_dir($path))
 	    {
@@ -671,7 +650,7 @@ function clear_theme_cache($path='',$isdir=false)
 	                }
 	            }
 	            
-	    	if($path!=WEB_ROOT.'/cache/')
+	    	if($path!=WEB_ROOT.'/cache/'.SESSION_PREFIX.'/')
 	    	{
 	            @rmdir($path);   
 	               
@@ -699,9 +678,10 @@ function refreshSetting($arrays)
           }
        }
  			 mysqld_update('config', array('value'=>''), array('name'=>'system_config_cache'));
+ 			 $_CMS['store_globa_setting']=	globaPrivateSetting();
 	}
 }
-function globaSetting($conditions=array())
+function globaPrivateSetting()
 {
 	
 		$config=array();
@@ -724,6 +704,15 @@ function globaSetting($conditions=array())
 		{
 			return unserialize($system_config_cache['value']);
 		}
+}
+function globaSetting($conditions=array())
+{
+		global $_CMS;
+		if(empty($_CMS['store_globa_setting']))
+		{
+		$_CMS['store_globa_setting']=	globaPrivateSetting();
+		}
+	return $_CMS['store_globa_setting'];
 }
 function getClientIP() {
 	static $ip = '';
@@ -901,10 +890,10 @@ function member_login_weixin($weixin_openid)
 									if(!empty($share_member['openid']))
 									{	
 										 
-										 if($_CMS['addons_bj_tbk'])
+										 if($_CMS['addons_fenxiao'])
 										 {
 										
-											bj_tbk_base_shareinfo($openid,$shareinfo);
+											fenxiao_base_shareinfo($openid,$shareinfo);
 										}
 											 	
 									}
@@ -923,9 +912,9 @@ function member_login_weixin($weixin_openid)
 								mysqld_insert('member', $data);
 								
 								mysqld_update('weixin_wxfans',array('openid'=>$openid),array('weixin_openid'=>$weixin_openid));	
-								if($_CMS['addons_bj_tbk'])
+								if($_CMS['addons_fenxiao'])
 				        {
-				       		 bj_tbk_reg_member($openid);
+				       		 fenxiao_reg_member($openid);
 				        }
 								member_login_weixin($weixin_openid);
 							
@@ -1045,7 +1034,10 @@ function integration_session_account($loginid,$oldsessionid)
 	 mysqld_update('shop_address', array('openid'=>$loginid), array('openid'=>$oldsessionid));
 	 mysqld_update('shop_order_paylog', array('openid'=>$loginid), array('openid'=>$oldsessionid));
 	 mysqld_update('member_paylog', array('openid'=>$loginid), array('openid'=>$oldsessionid));
-	
+
+	if($GLOBALS["_CMS"]['addons_bj_tbk']) {
+		mysqld_update('bj_tbk_share', array('temp_openid'=>$loginid), array('temp_openid'=>$oldsessionid));
+	}
 	/*可能出现刷分情况，屏蔽
 		 if($sessionmember['credit']>0)
 		 {
@@ -1250,7 +1242,22 @@ function member_gold($openid,$fee,$type,$remark)
 		}
 		return false;
 }
-
+function get_html($str)
+{
+if (!function_exists('file_get_html')) {
+        require_once(WEB_ROOT . '/includes/lib/simple_html_dom.php');
+    }	
+	$html = str_get_html($content);
+    $ret = $html->find('a');
+    foreach ($ret as $a) {
+        if (is_outer($a->href)) {
+            $a->outertext = $a->innertext;
+        }
+    }
+    $content = $html->save();
+    $html->clear();
+    return $content;
+}
 function random($length, $nc = 0) {
     $random= rand(1, 9);
     for($index=1;$index<$length;$index++)
@@ -1437,7 +1444,7 @@ if(is_file(WEB_ROOT.'/config/config.php')&&is_file(WEB_ROOT.'/config/install.lin
 {
 require(WEB_ROOT.'/system/common/lib/lib.php');
 }
-$system_module = array('common', 'index', 'member', 'modules', 'public', 'shop', 'shopwap', 'user', 'weixin','bonus','alipay','promotion');
+$system_module = array('common', 'index', 'member', 'modules', 'public', 'shop', 'shopwap', 'user', 'weixin','bonus','alipay','promotion','sms');
 if(in_array($modulename, $system_module) )
 {
 $classname = $modulename."Addons";
@@ -1460,38 +1467,6 @@ if(!class_exists($classname)) {
 			exit('ModuleSite Definition Class Not Found');
 }
 
-function checkAddons()
-{
-		$addons = dir(ADDONS_ROOT); 
-		while($file = $addons->read())
-		{
-							if(($file!=".") AND ($file!="..")) 
-								{
-									
-									
-										if(is_file(ADDONS_ROOT.$file.'/key.php'))
-										{
-										 $addons_key=file_get_contents(ADDONS_ROOT.$file.'/key.php');
-												if($file==$addons_key||md5($file)==$addons_key)
-												{
-													$item = mysqld_select("SELECT * FROM " . table('modules')." where `name`=:name", array(':name' => $file));
-							       			if(empty($item['name']))
-							       			{
-							       					message("发现可用插件，系统将进行安装！",create_url('site', array('name' => 'modules','do' => 'addons_update')),"success");
-							       			}else
-							       			{
-														 $addons_version=file_get_contents(ADDONS_ROOT.$file.'/version.php');
-														if($addons_version>$item['version'])
-														{
-																message("发现插件更新，系统将进行更新！",create_url('site', array('name' => 'modules','do' => 'addons_update')),"success");
-						
-														}
-							       			}
-						      	 		}
-						    	  }
-						}
-		}
-}
 $class = new $classname();
 $class->module = $modulename;
 $class->inMobile = SYSTEM_ACT=='mobile';
@@ -1513,36 +1488,11 @@ if($class instanceof BjSystemModule) {
 				{
 					checklogin();
 				}
-				if(($modulename!="public"&&$_GP['do']!="index")&&$modulename!="modules"&&$_GP['do']!="update"&&$_GP['act']!="toupdate")
-				{
-					if(intval(CORE_VERSION)>intval(SYSTEM_VERSION))
-					{
-					message("发现最新版本，系统将进行更新！",create_url('site', array('name' => 'modules','do' => 'update','act'=>'toupdate')),"success");
-					}
-		
-					
-				}else
-				{
-				define('LOCK_TO_UPDATE', true);	
-					
-				}
-				if($modulename=="modules"&&$_GP['do']=="addons_update")
-				{
-					define('LOCK_TO_ADDONS_INSTALL', true);	
-				}
 					$class->inMobile = false;
-				
-				if($modulename!="modules"&&!defined('LOCK_TO_UPDATE')&&$modulename!="index"&&$modulename!="common"&&$modulename!="public")
-				{
-					if(checkrule($modulename,$_GP['do'])==false)
+					if(hasrule($modulename,$_GP['do'])==false)
 					{
-					message("您没有权限操作此功能");	
+					return false;
 					}
-				}
-				
-				
-				
-				
 			}
 					$method = 'do_'.$_GP['do'];
 		}
@@ -1628,9 +1578,9 @@ if($class instanceof BjModule) {
 			
 					$class->inMobile = false;
 				
-					if(checkrule($modulename,$_GP['do'])==false)
+						if(hasrule($modulename,$_GP['do'])==false)
 					{
-					message("您没有权限操作此功能");	
+					return false;
 					}
 				
 			}

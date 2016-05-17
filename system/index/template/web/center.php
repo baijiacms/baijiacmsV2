@@ -221,23 +221,25 @@ $(function () {
 			<div class="work-bench-r">
 		        <div class="pending-order">
 		            <dl>
-		                <dt><span class="title">待处理订单</span></dt>
-		                <dd><a href="<?php  echo create_url('site',  array('name' => 'shop','do'=>'order','op' => 'display', 'status' => 1))?>">待发货：<?php echo $needsend_count ?>笔</a>￥<?php echo $needsend__price ?></dd>
-		                <dd><a href="<?php  echo create_url('site',  array('name' => 'shop','do'=>'order','op' => 'display', 'status' => -3))?>">退换货：<?php echo $returnofgoods_count ?>笔</a>￥<?php echo $returnofgoods_price ?></dd>
-		               <dd><a href="<?php  echo create_url('site',  array('name' => 'shop','do'=>'order','op' => 'display', 'status' => -2))?>">退款单：<?php echo $returnofmoney_count ?>笔</a>￥<?php echo $returnofmoney_price ?></dd>
-		              
+		               <dt><span class="title">待处理事务</span></dt>
+		                <dd><a href="<?php  echo create_url('site',  array('name' => 'member','do'=>'outchargegold'))?>">余额提现申请：<?php echo $needoutchargegold ?>条</a></dd>
+		                <dd><a href="<?php  echo create_url('site',  array('name' => 'shop','do'=>'goods_comment','op' => 'display'))?>">本月新评论：<?php echo $monthgoodscomment ?>条</a></dd>
+		               <dd><a href="<?php  echo create_url('site',  array('name' => 'shop','do'=>'order','op' => 'display', 'status' => -2))?>">本月新增会员：<?php echo $monthmember ?>名</a></dd>
+		          
 		            </dl>
 		        </div>
 		        <div class="latest-notice">
-		            <dl>
-		                <dt><span class="title">最新通知</span> <a class="more" target="_blank" href="http://bbs.baijiacms.com/">更多&gt;</a></dt>
-		               <dd style="height: 250px;padding-left: 0px;margin-left: 0px;line-height: 0px;">
-		                 <iframe width="100%" scrolling="no" height="100%" style="height: 250px;" frameborder="0" src="<?php echo WEBSITE_ROOT;?>/notice.php"></iframe>
-</dd>
-		                <!--	<div class="list-none-text"><span>暂无通知</span></div>-->
-		                
-		                
-		                <!-- 这里循环11条 -->
+		        <dl>
+		               <dt><span class="title">待处理订单</span></dt>
+		                <dd><a href="<?php  echo create_url('site',  array('name' => 'shop','do'=>'order','op' => 'display', 'status' => 1))?>">待发货：<?php echo $needsend_count ?>笔</a>￥<?php echo $needsend__price ?></dd>
+		                <dd><a href="<?php  echo create_url('site',  array('name' => 'shop','do'=>'order','op' => 'display', 'status' => 2))?>">待收货：<?php echo $needget_count ?>笔</a>￥<?php echo $needget__price ?></dd>
+		               
+		               
+		                <dd><a href="<?php  echo create_url('site',  array('name' => 'shop','do'=>'order','op' => 'display', 'status' => -3))?>">换货单：<?php echo $returnofgoods_count ?>笔</a>￥<?php echo $returnofgoods_price ?></dd>
+		                <dd><a href="<?php  echo create_url('site',  array('name' => 'shop','do'=>'order','op' => 'display', 'status' => -4))?>">退货单：<?php echo $noneedgoods_count ?>笔</a>￥<?php echo $noneedgoods_price ?></dd>
+		               
+		               <dd><a href="<?php  echo create_url('site',  array('name' => 'shop','do'=>'order','op' => 'display', 'status' => -2))?>">退款单：<?php echo $returnofmoney_count ?>笔</a>￥<?php echo $returnofmoney_price ?></dd>
+		               
 		            </dl>
 		        </div>
 		    </div>

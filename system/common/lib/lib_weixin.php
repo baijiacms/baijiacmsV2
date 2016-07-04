@@ -4,16 +4,17 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 2015 http://www.baijiacms.com All rights reserved.
 // +----------------------------------------------------------------------
-// | Author: baijiacms <QQ:1987884799> <http://www.baijiacms.com>
+// | Author: 百家威信 <QQ:1987884799> <http://www.baijiacms.com>
 // +----------------------------------------------------------------------
 defined('SYSTEM_IN') or exit('Access Denied');
 
 function get_weixin_fans_byopenid($openid,$weixin_openid) {
-		$weixin_wxfans = mysqld_select("SELECT * FROM ".table('weixin_wxfans')." where openid=:openid or weixin_openid=:weixin_openid", array(':openid' => $openid,':weixin_openid' => $weixin_openid));
+			global $_CMS;
+		$weixin_wxfans = mysqld_select("SELECT * FROM ".table('weixin_wxfans')." where openid=:openid or weixin_openid=:weixin_openid ", array(':openid' => $openid,':weixin_openid' => $weixin_openid));
 		return $weixin_wxfans;
 }
 function get_js_ticket() {
- 	$configs=globaSetting(array("jsapi_ticket","jsapi_ticket_exptime"));
+ 	$configs=globaSetting();
 
 		$jsapi_ticket=$configs['jsapi_ticket'];
 		$jsapi_ticket_exptime = intval($configs['jsapi_ticket_exptime']);
@@ -145,25 +146,205 @@ function weixin_share($mobile_url,$mobilearray,$sharetitle,$shareimg,$sharedesc,
 		return $signPackage;
 	}
 
-function is_use_weixin()
-{
-		$configs=globaSetting();
-		$no_access=intval($configs['weixin_noaccess']);
-		if(empty($configs['weixin_appId']))
-		{
-			return false;
-			}
-		if(empty($configs['weixin_appSecret']))
-		{
-			return false;
-		}
-	if ((strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')!== false)&&empty($no_access)) {
+
+	function register_snsapi_userinfo($access_token,$openid,$state)
+	{
+				global $_GP,$_CMS;
+				
+				if($state==2)
+				{
+	
+					$oauth2_url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";
+					$content = http_get($oauth2_url);
+					$info = @json_decode($content, true);
+					$follow=0;
+				}else
+				{
+					$access_token=get_weixin_token();
+					$oauth2_url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";
+					$content = http_get($oauth2_url);
+					$info = @json_decode($content, true);
+					if($info['subscribe']==1)
+					{
+						$follow=1;
+					}else
+					{
+						$settings=globaSetting();
+						 $appId        = $settings['weixin_appId'];
+						 $url          = WEBSITE_ROOT . '/index.php?' . $_SERVER['QUERY_STRING'];
+						    $authurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $appId . "&redirect_uri=" . urlencode($url) . "&response_type=code&scope=snsapi_userinfo&state=2#wechat_redirect";
+	            header('location: ' . $authurl);
+	            exit();
+					}
+				}
+			$fans = mysqld_select("SELECT openid,weixin_openid FROM " . table('weixin_wxfans') . " WHERE weixin_openid=:weixin_openid ", array(':weixin_openid' =>$openid));
+		  $gender=$info["gender"];
+			$nickname=$info["nickname"];
+			if(empty($fans['weixin_openid']))
+			{
+				  		$row = array(
+					'nickname'=> $nickname,
+					'follow' => $follow,
+					'gender' => intval($gender),
+					'weixin_openid' => $openid,
+					'avatar'=>'',
+					'createtime' => TIMESTAMP
+				);
+					mysqld_insert('weixin_wxfans', $row);	
+					if(!empty($info["headimgurl"])){
+				mysqld_update('weixin_wxfans', array('avatar'=>$info["headimgurl"]), array('weixin_openid' => $openid));	
+					}
+				}else
+				{
+					
+					$row = array(
+					'follow' => $follow,
+					'gender' => intval($gender)
+				);
+				if(!empty($nickname))
+				{
+					$row['nickname']=$nickname;
+				}
+				mysqld_update('weixin_wxfans', $row, array('weixin_openid' => $openid));	
 		
+						if(!empty($info["headimgurl"])){
+				mysqld_update('weixin_wxfans', array('avatar'=>$info["headimgurl"]), array('weixin_openid' => $openid));	
+					}
+					
+				}
+					$fans = mysqld_select("SELECT openid FROM " . table('weixin_wxfans') . " WHERE weixin_openid=:weixin_openid  ", array(':weixin_openid' =>$openid));
+		
+				if(!empty($fans['openid'])&&!empty($nickname))
+				{
+					$member = mysqld_select("SELECT nickname FROM " . table('member') . " WHERE openid=:openid  ", array(':openid' =>$fans['openid']));
+		 	if(empty($member['nickname']))
+		 	{
+		 		mysqld_update('member', array('nickname'=>$nickname), array('openid' => $fans['openid']));
+		 	}
+				 	if(empty($member['realname']))
+		 	{
+		 		mysqld_update('member', array('realname'=>$nickname), array('openid' => $fans['openid']));
+		 	}
+						
+					
+				}
+				
+				
+	}
+define('WEIXIN_COOKIE_ID', "__s".md5(SESSION_PREFIX)."_open");
+function get_weixin_openid() {
+	global $_GP,$_CMS;
+	if ( is_use_weixin()==false ) {
 		return true;
 	}
-	return false;
+	$settings=globaSetting();
+$lifeTime = 24 * 3600 * 1;
+session_set_cookie_params($lifeTime);
+@session_start();
+ $cookieid = WEIXIN_COOKIE_ID;
+$openid   = base64_decode($_COOKIE[$cookieid]);
+	if (!empty($openid)) {
+		if(empty($_SESSION[MOBILE_WEIXIN_OPENID]))
+		{
+		$_SESSION[MOBILE_WEIXIN_OPENID]=$openid;
+		}
+           return $openid;
+  }
+    $appId        = $settings['weixin_appId'];
+        $appSecret    = $settings['weixin_appSecret'];
+        	if(empty($appId) || empty($appSecret)){
+					message('微信公众号没有配置公众号AppId和公众号AppSecret!') ;
+					}
+        $access_token = "";
+        $code         = $_GP['code'];
+        $url          = WEBSITE_ROOT . '/index.php?' . $_SERVER['QUERY_STRING'];
+       
+    if (empty($code)) {
+    			if($_GP['state']==2)
+    			{
+            $authurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $appId . "&redirect_uri=" . urlencode($url) . "&response_type=code&scope=snsapi_userinfo&state=2#wechat_redirect";
+            header('location: ' . $authurl);
+            exit();
+          }else
+          {
+          	  $authurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $appId . "&redirect_uri=" . urlencode($url) . "&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+            header('location: ' . $authurl);
+            exit();
+          }
+        } else {
+            $tokenurl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" . $appId . "&secret=" . $appSecret . "&code=" . $code . "&grant_type=authorization_code";
+         		$resp = http_get($tokenurl);
+						$token = @json_decode($resp, true);
+            if (!empty($token) && is_array($token) && $token['errmsg'] == 'invalid code') {
+            	if($_GP['state']==2)
+		    			{
+		            $authurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $appId . "&redirect_uri=" . urlencode($url) . "&response_type=code&scope=snsapi_userinfo&state=2#wechat_redirect";
+		            header('location: ' . $authurl);
+		            exit();
+		          }else
+		          {
+            $authurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $appId . "&redirect_uri=" . urlencode($url) . "&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+                header('location: ' . $authurl);
+                exit();
+              }
+            }
+            if (is_array($token) && !empty($token['openid'])) {
+                $access_token = $token['access_token'];
+                $openid       = $token['openid'];
+              
+                register_snsapi_userinfo($access_token,$openid,$_GP['state']);
+                  setcookie($cookieid, base64_encode($openid));
+                $_SESSION[MOBILE_WEIXIN_OPENID]=$openid;
+       
+                
+            } else {
+                $querys = explode('&', $_SERVER['QUERY_STRING']);
+                $newq   = array();
+                foreach ($querys as $q) {
+                    if (!strexists($q, 'code=') && !strexists($q, 'state=') && !strexists($q, 'from=') && !strexists($q, 'isappinstalled=')) {
+                        $newq[] = $q;
+                    }
+                }
+                $rurl    = WEBSITE_ROOT. 'index.php?' . implode('&', $newq);
+                $authurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" . $appId . "&redirect_uri=" . urlencode($rurl) . "&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
+                header('location: ' . $authurl);
+                exit;
+            }
+        }
+          return $openid;
+}
+function strexists($string, $find) {
+	return !(strpos($string, $find) === FALSE);
 }
 
+function weixin_js_signPackage($signPackage=array())
+{
+	if ( is_use_weixin()==false ) {
+		return true;
+		}
+			$settings=globaSetting();
+	  $timestamp = time();
+    $nonceStr =weixin_createNonceStr(16);
+     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+   
+   	 $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+ $jsapiTicket = get_js_ticket();
+	 $string = "jsapi_ticket=$jsapiTicket&noncestr=$nonceStr&timestamp=$timestamp&url=$url";
+   
+	
+	   $signature = sha1($string);
+	   
+	   $signPackage["appId"]=$settings['weixin_appId'];
+	    $signPackage["nonceStr"]=$nonceStr;
+	      $signPackage["timestamp"]=$timestamp;
+	      $signPackage["url"]=$url;
+	    $signPackage["signature"]=$signature;
+	   $signPackage["rawString"]=$string;
+	       
+		
+		return $signPackage;
+	
+}
 
 function weixin_code_access_token($state=0,$scope="snsapi_base",$refresh=false)
 	{
@@ -224,204 +405,6 @@ function weixin_code_access_token($state=0,$scope="snsapi_base",$refresh=false)
 	}
 		
 	}
-	
-function xoauth() {
-//	message("维护中");
-	if ( is_use_weixin()==false ) {
-		return true;
-		}
-		global $_GP;
-		//用户不授权返回提示说明
-		if ($_GP['code']=="authdeny"){
-			echo "authdeny";
-			 exit;
-		}	
-		$state=$_GP['state'];
-	if ($state==1){
-		$token=weixin_code_access_token(1,"snsapi_userinfo");
-	}else
-	{
-			$token=weixin_code_access_token(0,"snsapi_base");
-	}
-		if(!empty($token))
-		{
-			 $from_user = $token['openid'];
-				$access_token =get_weixin_token();
-				$oauth2_url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$from_user."&lang=zh_CN";
-			
-			
-				$content = http_get($oauth2_url);
-				$info = @json_decode($content, true);
-				
-							if($info['subscribe']==1)
-				{
-					$follow=1;
-					
-				}else
-				{
-					$follow=0;
-					
-				}
-			$fans = mysqld_select("SELECT * FROM " . table('weixin_wxfans') . " WHERE weixin_openid=:weixin_openid ", array(':weixin_openid' =>$from_user));
-		  $gender=$info["gender"];
-			$nickname=$info["nickname"];
-			
-		 if(empty($fans)||empty($fans['weixin_openid'])||empty($fans["nickname"]))
-			{
-			
-				if($follow==0&&$state==0)
-				{
-					weixin_code_access_token(1,"snsapi_userinfo",true);
-					return;
-				}
-		
-				if($follow==0&&$state==1)
-				{
-				    $access_token = $token['access_token'];
-						$oauth2_url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$from_user."&lang=zh_CN";
-						$content = http_get($oauth2_url);
-						$info = @json_decode($content, true);
-				}
-		
-				/*
-				if(empty($info) || !is_array($info) || empty($info['openid'])   ) {
-					weixin_code_access_token(1,"snsapi_userinfo",true);
-					return;
-				}*/
-		
-			
-					$gender=$info['sex'];
-					$nickname=$info["nickname"];
-					
-				}
-			if(empty($fans['weixin_openid']))
-			{
-				  		$row = array(
-					'nickname'=> $nickname,
-					'follow' => $follow,
-					'gender' => intval($gender),
-					'weixin_openid' => $from_user,
-					'avatar'=>'',
-					'createtime' => TIMESTAMP
-				);
-					mysqld_insert('weixin_wxfans', $row);	
-					if(!empty($info["headimgurl"])){
-				mysqld_update('weixin_wxfans', array('avatar'=>$info["headimgurl"]), array('weixin_openid' => $from_user));	
-					}
-				}else
-				{
-					
-					$row = array(
-					'follow' => $follow,
-					'gender' => intval($gender),
-					'avatar'=>''
-				);
-				if(!empty($nickname))
-				{
-					$row['nickname']=$nickname;
-				}
-				mysqld_update('weixin_wxfans', $row, array('weixin_openid' => $from_user));	
-				
-				
-						if(!empty($info["headimgurl"])){
-				mysqld_update('weixin_wxfans', array('avatar'=>$info["headimgurl"]), array('weixin_openid' => $from_user));	
-					}
-					
-				}
-				if(!empty($fans['openid'])&&!empty($nickname))
-				{
-					$member = mysqld_select("SELECT realname FROM " . table('member') . " WHERE openid=:openid ", array(':openid' =>$fans['openid']));
-		 	if(empty($member['realname']))
-		 	{
-		 		mysqld_update('member', array('realname'=>$nickname), array('openid' => $fans['openid']));
-		 	}
-					
-					
-				}
-				
-				
-				
-				return $from_user;
-		}
-		return '';
-	
-	}
-
-function get_weixin_openid($state=0) {
-	if ( is_use_weixin()==false ) {
-		return true;
-		}
-		global $_GP;
-			$settings=globaSetting(array("weixin_appId","weixin_appSecret"));
-				$appid = $settings['weixin_appId'];
-				$secret = $settings['weixin_appSecret'];
-				if(empty($appid) || empty($secret)){
-					message('微信公众号没有配置公众号AppId和公众号AppSecret!') ;
-				}
-		if(!empty($_SESSION[MOBILE_WEIXIN_OPENID])&&!empty($_SESSION[MOBILE_SESSION_ACCOUNT])&&!empty($_SESSION[MOBILE_SESSION_ACCOUNT]['openid']))
-		{
-		$weixinfans = mysqld_select("SELECT * FROM " . table('weixin_wxfans') . " WHERE weixin_openid=:weixin_openid ", array(':weixin_openid' => $_SESSION[MOBILE_SESSION_ACCOUNT]['openid']));
-		 if(empty($weixinfans['weixin_openid'])||$_SESSION[MOBILE_WEIXIN_OPENID]!=$_SESSION[MOBILE_SESSION_ACCOUNT]['openid'])
-		 {
-		 	 unset($_SESSION[MOBILE_WEIXIN_OPENID]);
-		 		unset($_SESSION[MOBILE_SESSION_ACCOUNT]);
-		 }
-		 
-		 
-		}
-	if(empty($_SESSION[MOBILE_WEIXIN_OPENID])||empty($_SESSION[MOBILE_SESSION_ACCOUNT])||empty($_SESSION[MOBILE_SESSION_ACCOUNT]['openid']))
-		{
-		 $from_user=xoauth();
-		
-				$_SESSION[MOBILE_WEIXIN_OPENID]=$from_user;
-				$sessionAccount=array('openid'=>$from_user);
-				$_SESSION[MOBILE_SESSION_ACCOUNT]=$sessionAccount;
-				return $from_user;
-				exit;
-		}else
-		{
-			return 	$_SESSION[MOBILE_WEIXIN_OPENID];
-		}
-	}
-	$weixinthirdlogin = mysqld_select("SELECT * FROM " . table('thirdlogin') . " WHERE enabled=1 and `code`='weixin'");
-
-if(!empty($weixinthirdlogin)&&!empty($weixinthirdlogin['id']))
-{
-$weixin_openid=get_weixin_openid();
-
-	}
-
-
-
-
-function weixin_js_signPackage($signPackage=array())
-{
-	if ( is_use_weixin()==false ) {
-		return true;
-		}
-			$settings=globaSetting();
-	  $timestamp = time();
-    $nonceStr =weixin_createNonceStr(16);
-     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-   
-   	 $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
- $jsapiTicket = get_js_ticket();
-	 $string = "jsapi_ticket=$jsapiTicket&noncestr=$nonceStr&timestamp=$timestamp&url=$url";
-   
-	
-	   $signature = sha1($string);
-	   
-	   $signPackage["appId"]=$settings['weixin_appId'];
-	    $signPackage["nonceStr"]=$nonceStr;
-	      $signPackage["timestamp"]=$timestamp;
-	      $signPackage["url"]=$url;
-	    $signPackage["signature"]=$signature;
-	   $signPackage["rawString"]=$string;
-	       
-		
-		return $signPackage;
-	
-}
 
 
 
@@ -456,8 +439,6 @@ function weixin_js_signPackage($signPackage=array())
 	$result_ = json_encode($infoarray);
 		return $result_;
 	}
-	
-
 
 
 	
@@ -490,3 +471,30 @@ function weixin_js_signPackage($signPackage=array())
 		}
 		return $reqPar;
 	}
+	function is_in_weixin()
+{
+	if ((strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')!== false)) {
+		return true;
+	}
+	return false;
+}
+function is_use_weixin()
+{
+		global $_CMS,$_GP;
+	
+		$configs=globaSetting();
+		$no_access=intval($configs['weixin_noaccess']);
+		if(empty($configs['weixin_appId']))
+		{
+			return false;
+			}
+		if(empty($configs['weixin_appSecret']))
+		{
+			return false;
+		}
+	if ((strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')!== false)&&empty($no_access)) {
+		
+		return true;
+	}
+	return false;
+}

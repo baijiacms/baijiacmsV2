@@ -166,64 +166,26 @@
 		</div>
 			</div>
 
-<div class="field clearfix">
-		<label  class="aligned">config文件夹读写： </label>
-		<div class="contentinput">
-		<?php echo $resultfolderarray['config']; ?></div>
-			</div>
-			<div class="field clearfix">
-		<label  class="aligned">themes文件夹读写： </label>
-		<div class="contentinput">
-		<?php echo $resultfolderarray['themes']; ?></div>
-			</div>
-			
-						<div class="field clearfix">
-		<label  class="aligned">cache文件夹读写： </label>
-		<div class="contentinput">
-		<?php echo $resultfolderarray['cache']; ?></div>
-			</div>
+	<?php foreach ($checkfolders as $folder) : ?>
 		<div class="field clearfix">
-		<label  class="aligned">attachment文件夹读写： </label>
-		<div class="contentinput">
-		<?php echo $resultfolderarray['attachment']; ?></div>
+			<label  class="aligned">
+				<?= $folder['name'] ?>文件夹读写：
+			</label>
+			<div class="contentinput">
+			<?= $resultfolderarray[$folder['name']] ?></div>
+		</div>
+	<?php endforeach; ?>
+
+	<?php foreach ($checkfunction as $function) : ?>
+		<div class="field clearfix">
+			<label  class="aligned">
+				<?= $function['name'] ?>：
+			</label>
+			<div class="contentinput">
+				<?= $resultarray[$function['name']] ?>
 			</div>
-			
-			<div class="field clearfix">
-		<label  class="aligned">pdo_mysql： </label>
-		<div class="contentinput">
-		<?php echo $resultarray['pdo_mysql']; ?></div>
-			</div>
-			
-					<div class="field clearfix">
-		<label  class="aligned">pdo_mysql： </label>
-		<div class="contentinput">
-		<?php echo $resultarray['pdo_mysql']; ?></div>
-			</div>
-			
-				<div class="field clearfix">
-		<label  class="aligned">allow_url_fopen： </label>
-		<div class="contentinput">
-		<?php echo $resultarray['allow_url_fopen']; ?></div>
-			</div>
-			
-					<div class="field clearfix">
-		<label  class="aligned">file_get_contents： </label>
-		<div class="contentinput">
-		<?php echo $resultarray['file_get_contents']; ?></div>
-			</div>
-			
-				<div class="field clearfix">
-		<label  class="aligned">xml_parser_create： </label>
-		<div class="contentinput">
-		<?php echo $resultarray['xml_parser_create']; ?></div>
-			</div>
-			
-				<div class="field clearfix">
-		<label  class="aligned">curl_init： </label>
-		<div class="contentinput">
-		<?php echo $resultarray['curl_init']; ?></div>
-			</div>
-    	
+		</div>
+	<?php endforeach; ?>
 
 	</div><!-- div id="sheet_step" -->
 </div><!-- div id="sheets" -->

@@ -1,4 +1,4 @@
-<h3>此版本已停止维护，请使用百家cms微商城V3</h3>[百家cms微商城V3](https://github.com/baijiacms/baijiacmsV3) 
+<h3>此版本已停止维护，请使用<a href="https://github.com/baijiacms/baijiacmsV3">百家cms微商城V3</a> </h3>
 <br/>![](https://github.com/baijiacms/baijiacms.github.com/raw/master/image/logo/1.png)
 
 百家cms微商城遵循Apache2开源协议发布，并提供免费使用。
